@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, StatusBar, Modal, View, Text, TouchableOpacity, Button, Pressable } from "react-native";
+import { Image, StatusBar, Modal, View, Text, TouchableOpacity, Button, Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
 
 import { useNavigation } from '@react-navigation/native';
@@ -11,25 +11,23 @@ export default function RootLayout() {
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: "white",
-                tabBarInactiveTintColor: "gray",
+                tabBarActiveTintColor: "#02b5ff",
+                tabBarInactiveTintColor: "#838283",
                 tabBarStyle: {
-                    backgroundColor: "#181818",
-                    borderColor: "#181818"
+                    backgroundColor: "#342e36",
+                    borderColor: "#342e36",
                 },
             }}
         >
             <Tabs.Screen 
                 name="index"
                 options={{
-                    headerTitle: () => {
-                        return (
-                            <Image source={require('../../assets/logoWhite.png')} style={{height: 40, width: 40}}/>
-                        )
+                    title: "Home",
+                    headerTitleStyle: {
+                        color: "#ccc3cc"
                     },
                     headerStyle: {
-                        backgroundColor: "#181818",
-                        height: 100,
+                        backgroundColor: "#342e36",
                         borderBottomWidth: 0, 
                         shadowOpacity: 0,
                         elevation: 0, 
@@ -37,55 +35,80 @@ export default function RootLayout() {
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "home" : "home-outline"} size={30} color={color} />;
                     },
-                    tabBarShowLabel: false
                 }}
             />
             <Tabs.Screen 
                 name="statistics" 
                 options={{
-                    headerShown: false,
+                    title: "Statistics",
+                    headerTitleStyle: {
+                        color: "#ccc3cc"
+                    },
+                    headerStyle: {
+                        backgroundColor: "#342e36",
+                        borderBottomWidth: 0, 
+                        shadowOpacity: 0,
+                        elevation: 0, 
+                    },
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={30} color={color} />;
                     },
-                    tabBarShowLabel: false
                 }}
             />
             <Tabs.Screen 
-                name="post" 
+                name="addTrade" 
                 options={{
-                    headerShown: false,
-                    tabBarIcon: ({ focused, color, size }) => {
-                        return <Ionicons name={focused ? "add-circle" : "add-circle-outline"} size={30} color={color} />;
-                    },
-                    tabBarShowLabel: false,
-                    tabBarButton: (props) => (
-                        <Pressable
-                            {...props}
-                            onPress={() => navigation.navigate('postPage')} // Navigate to the 'PostPage' screen
-                        />
-                    )
+                    tabBarButton: () => (
+                        <Pressable style={styles.postButton} onPress={() => navigation.navigate('addTrade')}>
+                            <Ionicons name="add-circle" size={40} color="#d466e3" />
+                        </Pressable>
+                    ),
                 }}
             />
             <Tabs.Screen 
                 name="strategies"
                 options={{
-                    headerShown: false,
+                    title: "Strategies",
+                    headerTitleStyle: {
+                        color: "#ccc3cc"
+                    },
+                    headerStyle: {
+                        backgroundColor: "#342e36",
+                        borderBottomWidth: 0, 
+                        shadowOpacity: 0,
+                        elevation: 0, 
+                    },
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "bulb" : "bulb-outline"} size={30} color={color} />;
                     },
-                    tabBarShowLabel: false
                 }}
             />
             <Tabs.Screen 
                 name="profile" 
                 options={{
-                    headerShown: false,
-                    tabBarIcon: ({ focused, color, size }) => {
-                        return <Ionicons name={focused ? "person" : "person-outline"} size={30} color={color} />;
+                    title: "Setting",
+                    headerTitleStyle: {
+                        color: "#ccc3cc"
                     },
-                    tabBarShowLabel: false
+                    headerStyle: {
+                        backgroundColor: "#342e36",
+                        borderBottomWidth: 0, 
+                        shadowOpacity: 0,
+                        elevation: 0, 
+                    },
+                    tabBarIcon: ({ focused, color, size }) => {
+                        return <Ionicons name={focused ? "settings" : "settings-outline"} size={30} color={color} />;
+                    },
                 }}
             />
         </Tabs>
     );
 }
+
+const styles = StyleSheet.create({
+    postButton: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});

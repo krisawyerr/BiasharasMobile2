@@ -19,9 +19,15 @@ export default function RootLayout() {
                     }}
                 />
                 <Stack.Screen 
-                    name="postPage" 
+                    name="addTrade" 
                     options={{
-                        headerShown: false,
+                        title: "Add Item",
+                        headerTitleStyle: {
+                            color: "#ccc3cc"
+                        },
+                        headerStyle: {
+                            backgroundColor: "#342e36",
+                        },
                         presentation: "modal"
                     }}
                 />

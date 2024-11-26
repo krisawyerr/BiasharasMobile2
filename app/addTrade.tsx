@@ -1,9 +1,10 @@
+
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Strategies() {
+export default function AddTrade() {
   return (
     <View style={styles.page}>
-      <Text style={styles.text}>Strategies</Text>
+      <Text style={styles.text}>AddTrade</Text>
     </View>
   );
 }
