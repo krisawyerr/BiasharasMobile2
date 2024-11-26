@@ -1,8 +1,11 @@
 import { Tabs } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
-import { StatusBar } from "react-native";
+import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 
 export default function RootLayout() {
+    const [modalVisible, setModalVisible] = useState(false);
+
     return (
         <>
             <StatusBar />
@@ -19,19 +22,30 @@ export default function RootLayout() {
                 <Tabs.Screen 
                     name="index"
                     options={{
-                        headerShown: false,
+                        headerTitle: () => {
+                            return (
+                                <Image source={require('../assets/logoWhite.png')} style={{height: 40, width: 40}}/>
+                            )
+                        },
+                        headerStyle: {
+                            backgroundColor: "#181818",
+                            height: 100,
+                            borderBottomWidth: 0, 
+                            shadowOpacity: 0,
+                            elevation: 0, 
+                        },
                         tabBarIcon: ({ focused, color, size }) => {
-                            return <Ionicons name="home" size={30} color={color} />;
+                            return <Ionicons name={focused ? "home" : "home-outline"} size={30} color={color} />;
                         },
                         tabBarShowLabel: false
                     }}
                 />
                 <Tabs.Screen 
-                    name="search" 
+                    name="statistics" 
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ focused, color, size }) => {
-                            return <Ionicons name="search" size={30} color={color} />;
+                            return <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={30} color={color} />;
                         },
                         tabBarShowLabel: false
                     }}
@@ -41,17 +55,17 @@ export default function RootLayout() {
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ focused, color, size }) => {
-                            return <Ionicons name="add-circle" size={30} color={color} />;
+                            return <Ionicons name={focused ? "add-circle" : "add-circle-outline"} size={30} color={color} />;
                         },
                         tabBarShowLabel: false
                     }}
                 />
                 <Tabs.Screen 
-                    name="activity"
+                    name="strategies"
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ focused, color, size }) => {
-                            return <Ionicons name="heart" size={30} color={color} />;
+                            return <Ionicons name={focused ? "bulb" : "bulb-outline"} size={30} color={color} />;
                         },
                         tabBarShowLabel: false
                     }}
@@ -61,7 +75,7 @@ export default function RootLayout() {
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ focused, color, size }) => {
-                            return <Ionicons name="person" size={30} color={color} />;
+                            return <Ionicons name={focused ? "person" : "person-outline"} size={30} color={color} />;
                         },
                         tabBarShowLabel: false
                     }}
