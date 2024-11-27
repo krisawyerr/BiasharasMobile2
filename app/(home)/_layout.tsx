@@ -33,14 +33,14 @@ export default function RootLayout() {
                         elevation: 0, 
                     },
                     tabBarIcon: ({ focused, color, size }) => {
-                        return <Ionicons name={focused ? "home" : "home-outline"} size={30} color={color} />;
+                        return <Ionicons name={focused ? "home" : "home-outline"} size={29} color={color} />;
                     },
                 }}
             />
             <Tabs.Screen 
-                name="statistics" 
+                name="trades" 
                 options={{
-                    title: "Statistics",
+                    title: "Trades",
                     headerTitleStyle: {
                         color: "#ccc3cc"
                     },
@@ -51,7 +51,7 @@ export default function RootLayout() {
                         elevation: 0, 
                     },
                     tabBarIcon: ({ focused, color, size }) => {
-                        return <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={30} color={color} />;
+                        return <Ionicons name={focused ? "clipboard" : "clipboard-outline"} size={29} color={color} />;
                     },
                 }}
             />
@@ -79,7 +79,7 @@ export default function RootLayout() {
                         elevation: 0, 
                     },
                     tabBarIcon: ({ focused, color, size }) => {
-                        return <Ionicons name={focused ? "bulb" : "bulb-outline"} size={30} color={color} />;
+                        return <Ionicons name={focused ? "bulb" : "bulb-outline"} size={29} color={color} />;
                     },
                 }}
             />
@@ -97,7 +97,7 @@ export default function RootLayout() {
                         elevation: 0, 
                     },
                     tabBarIcon: ({ focused, color, size }) => {
-                        return <Ionicons name={focused ? "settings" : "settings-outline"} size={30} color={color} />;
+                        return <Ionicons name={focused ? "settings" : "settings-outline"} size={29} color={color} />;
                     },
                 }}
             />
