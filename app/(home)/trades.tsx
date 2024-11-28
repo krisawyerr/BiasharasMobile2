@@ -1,19 +1,20 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import TRADES from "../../data/trades.json";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 interface Trade {
-  transactionId: number;
-  type: string;
-  date: string;
-  amount: number;
-  status: string;
-  currency?: string;
-  currencyPair?: string;
-  exchangeRate?: number;
-  resultRate?: number;
-  profit?: number;
+  currencyPair: string,
+  amountRisked: number,
+  date: string,
+  profit: number,
+  transactionId: number,
+  type: string,
+  lots: number,
+  tradingSession: string,
+  notes: string
 }
 
 export default function Trades() {
@@ -46,22 +47,24 @@ export default function Trades() {
         <View key={month} style={styles.section}>
           <Text style={styles.header}>{month}</Text>
           {trades.map(trade => (
-            <View style={styles.tradeItem} key={trade.transactionId}>
-              <View style={styles.dateGridCell}>
-                <Text style={styles.date}>{new Date(trade.date).getUTCDate()}</Text>
-                <Text style={styles.day}>{new Date(trade.date).toLocaleString('en-US', { weekday: 'short' })}</Text>
-              </View>
-              <View style={styles.gridCell}>
-                <Text style={styles.type}>{trade.type.toUpperCase()}</Text>
-                <Text style={styles.date}>{trade.currencyPair}</Text>
-              </View>
-              <View style={styles.pnlGridCell}>
-                <View style={styles.pnlContainer}>
-                  <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? "#ff2847" : "#04a205"} />
-                  <Text style={{ color: trade.profit! < 0 ? "#ff2847" : "#04a205"}}>{trade.profit}</Text>
+            <Link href={`/singleTrade/${trade.transactionId}`} key={trade.transactionId} asChild>
+              <Pressable style={styles.tradeItem}>
+                <View style={styles.dateGridCell}>
+                  <Text style={styles.date}>{new Date(trade.date).getUTCDate()}</Text>
+                  <Text style={styles.day}>{new Date(trade.date).toLocaleString('en-US', { weekday: 'short' })}</Text>
                 </View>
-              </View>
-            </View>
+                <View style={styles.gridCell}>
+                  <Text style={styles.type}>{trade.type.toUpperCase()}</Text>
+                  <Text style={styles.date}>{trade.currencyPair}</Text>
+                </View>
+                <View style={styles.pnlGridCell}>
+                  <View style={styles.pnlContainer}>
+                    <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? "#ff2847" : "#04a205"} />
+                    <Text style={{ color: trade.profit! < 0 ? "#ff2847" : "#04a205"}}>{trade.profit}</Text>
+                  </View>
+                </View>
+              </Pressable>
+            </Link>
           ))}
         </View>
       ))}
