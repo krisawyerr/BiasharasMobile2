@@ -3,6 +3,7 @@ import { StyleSheet, View, Button, Text, ScrollView, Pressable, TextInput } from
 import DatePicker from 'react-native-neat-date-picker'
 import { sessions, tradingPairs, types } from '../data/formData'
 import { Picker } from 'react-native-ui-lib'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const App = () => {
   const [showDatePickerSingle, setShowDatePickerSingle] = useState(false)
@@ -36,7 +37,11 @@ const App = () => {
 
   return (
     <>
-      <ScrollView style={styles.page}>
+      <KeyboardAwareScrollView
+        style={styles.page}
+        keyboardShouldPersistTaps="handled"
+        enableAutomaticScroll
+      >
         <View style={styles.container}>
           <Pressable onPress={openDatePickerSingle} style={styles.row}>
             <Text style={styles.headerText}>Date</Text>
@@ -47,7 +52,7 @@ const App = () => {
             <Text style={styles.infoText}>{selectedPair}</Text>
             <Picker
               showSearch
-              topBarProps={{title: 'Trading Pair'}}
+              topBarProps={{ title: 'Trading Pair' }}
               searchStyle={{
                 color: "blue",
                 placeholderTextColor: "gray",
@@ -62,7 +67,7 @@ const App = () => {
             <Text style={styles.headerText}>Type</Text>
             <Text style={styles.infoText}>{selectedType}</Text>
             <Picker
-              topBarProps={{title: 'Type'}}
+              topBarProps={{ title: 'Type' }}
               ref={typeRef}
               value={selectedType}
               onChange={item => setSelectedType(item)}
@@ -73,7 +78,7 @@ const App = () => {
             <Text style={styles.headerText}>Session</Text>
             <Text style={styles.infoText}>{selectedSession}</Text>
             <Picker
-              topBarProps={{title: 'Session'}}
+              topBarProps={{ title: 'Session' }}
               ref={sessionRef}
               value={selectedSession}
               onChange={item => setSelectedSession(item)}
@@ -85,9 +90,9 @@ const App = () => {
             <TextInput
               style={styles.infoText}
               ref={riskRef}
-              value={risk}  
-              onChangeText={() => setRisk}  
-              keyboardType="numeric" 
+              value={risk}
+              onChangeText={() => setRisk}
+              keyboardType="numeric"
             />
           </Pressable>
           <Pressable style={styles.row} onPress={() => lotsRef.current?.focus()}>
@@ -95,9 +100,9 @@ const App = () => {
             <TextInput
               style={styles.infoText}
               ref={lotsRef}
-              value={lots}  
-              onChangeText={() => setLots}  
-              keyboardType="numeric" 
+              value={lots}
+              onChangeText={() => setLots}
+              keyboardType="numeric"
             />
           </Pressable>
           <Pressable style={styles.row} onPress={() => profitsRef.current?.focus()}>
@@ -105,9 +110,9 @@ const App = () => {
             <TextInput
               style={styles.infoText}
               ref={profitsRef}
-              value={profits}  
-              onChangeText={() => setProfits}  
-              keyboardType="numeric" 
+              value={profits}
+              onChangeText={() => setProfits}
+              keyboardType="numeric"
             />
           </Pressable>
           <Pressable style={styles.row} onPress={() => notesRef.current?.focus()}>
@@ -115,14 +120,19 @@ const App = () => {
             <TextInput
               style={styles.infoText}
               ref={notesRef}
-              value={notes}  
-              onChangeText={() => setNotes}  
+              value={notes}
+              onChangeText={() => setNotes}
               multiline={true}
             />
           </Pressable>
         </View>
-      </ScrollView>
-    
+        <Pressable>
+          <View style={styles.submitButton}>
+            <Text style={styles.submitText}>Add Trade</Text>
+          </View>
+        </Pressable>
+      </KeyboardAwareScrollView>
+
       <DatePicker
         isVisible={showDatePickerSingle}
         mode={'single'}
@@ -174,11 +184,26 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 17
   },
+  submitText: {
+    width: "30%",
+    color: "#e5e1e5",
+    fontWeight: 700,
+    fontSize: 17,
+    textAlign: "center"
+  },
   infoText: {
     width: "70%",
     color: "#e5e1e5",
     fontWeight: 400,
     fontSize: 17,
-    overflow: ""
+  },
+  submitButton: {
+    backgroundColor: "#acacac",
+    padding: 13,
+    margin: "auto",
+    marginBottom: 40,
+    borderRadius: 50,
+    minWidth: 250,
+    alignItems: "center"
   }
 });
