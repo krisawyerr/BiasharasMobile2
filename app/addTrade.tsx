@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
-import { StyleSheet, View, Button, Text, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, View, Button, Text, ScrollView, Pressable, TextInput } from 'react-native'
 import DatePicker from 'react-native-neat-date-picker'
-import { tradingPairs } from '../data/pairs'
+import { sessions, tradingPairs, types } from '../data/formData'
 import { Picker } from 'react-native-ui-lib'
 
 const App = () => {
@@ -9,7 +9,20 @@ const App = () => {
   const [date, setDate] = useState(new Date());
   const openDatePickerSingle = () => setShowDatePickerSingle(true)
   const [selectedPair, setSelectedPair] = useState();
-  const pickerRef = useRef(null);
+  const [selectedType, setSelectedType] = useState();
+  const [selectedSession, setSelectedSession] = useState();
+  const [risk, setRisk] = useState();
+  const [lots, setLots] = useState();
+  const [profits, setProfits] = useState();
+  const [notes, setNotes] = useState();
+
+  const pairRef = useRef(null);
+  const typeRef = useRef(null);
+  const sessionRef = useRef(null);
+  const riskRef = useRef(null);
+  const lotsRef = useRef(null);
+  const profitsRef = useRef(null);
+  const notesRef = useRef(null);
 
   const onCancelSingle = () => {
     setShowDatePickerSingle(false)
@@ -29,54 +42,87 @@ const App = () => {
             <Text style={styles.headerText}>Date</Text>
             <Text style={styles.infoText}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
           </Pressable>
-          <Pressable style={styles.row} onPress={() => pickerRef.current?.openExpandable?.()}>
+          <Pressable style={styles.row} onPress={() => pairRef.current?.openExpandable?.()}>
             <Text style={styles.headerText}>Pair</Text>
             <Text style={styles.infoText}>{selectedPair}</Text>
             <Picker
               showSearch
-              searchPlaceholder="Search a language"
               topBarProps={{title: 'Trading Pair'}}
               searchStyle={{
                 color: "blue",
                 placeholderTextColor: "gray",
               }}
-              ref={pickerRef}
+              ref={pairRef}
               value={selectedPair}
               onChange={item => setSelectedPair(item)}
               items={tradingPairs}
             />
           </Pressable>
-
-
-
-
-          <View style={styles.row}>
+          <Pressable style={styles.row} onPress={() => typeRef.current?.openExpandable?.()}>
             <Text style={styles.headerText}>Type</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
-          <View style={styles.row}>
+            <Text style={styles.infoText}>{selectedType}</Text>
+            <Picker
+              topBarProps={{title: 'Type'}}
+              ref={typeRef}
+              value={selectedType}
+              onChange={item => setSelectedType(item)}
+              items={types}
+            />
+          </Pressable>
+          <Pressable style={styles.row} onPress={() => sessionRef.current?.openExpandable?.()}>
             <Text style={styles.headerText}>Session</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
-          <View style={styles.row}>
+            <Text style={styles.infoText}>{selectedSession}</Text>
+            <Picker
+              topBarProps={{title: 'Session'}}
+              ref={sessionRef}
+              value={selectedSession}
+              onChange={item => setSelectedSession(item)}
+              items={sessions}
+            />
+          </Pressable>
+          <Pressable style={styles.row} onPress={() => riskRef.current?.focus()}>
             <Text style={styles.headerText}>Risk</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
-          <View style={styles.row}>
+            <TextInput
+              style={styles.infoText}
+              ref={riskRef}
+              value={risk}  
+              onChangeText={() => setRisk}  
+              keyboardType="numeric" 
+            />
+          </Pressable>
+          <Pressable style={styles.row} onPress={() => lotsRef.current?.focus()}>
             <Text style={styles.headerText}>Lots</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
-          <View style={styles.row}>
+            <TextInput
+              style={styles.infoText}
+              ref={lotsRef}
+              value={lots}  
+              onChangeText={() => setLots}  
+              keyboardType="numeric" 
+            />
+          </Pressable>
+          <Pressable style={styles.row} onPress={() => profitsRef.current?.focus()}>
             <Text style={styles.headerText}>Profit</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
-          <View style={styles.lastRow}>
+            <TextInput
+              style={styles.infoText}
+              ref={profitsRef}
+              value={profits}  
+              onChangeText={() => setProfits}  
+              keyboardType="numeric" 
+            />
+          </Pressable>
+          <Pressable style={styles.row} onPress={() => notesRef.current?.focus()}>
             <Text style={styles.headerText}>Notes</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
+            <TextInput
+              style={styles.infoText}
+              ref={notesRef}
+              value={notes}  
+              onChangeText={() => setNotes}  
+              multiline={true}
+            />
+          </Pressable>
         </View>
       </ScrollView>
-
+    
       <DatePicker
         isVisible={showDatePickerSingle}
         mode={'single'}
@@ -132,6 +178,7 @@ const styles = StyleSheet.create({
     width: "70%",
     color: "#e5e1e5",
     fontWeight: 400,
-    fontSize: 17
+    fontSize: 17,
+    overflow: ""
   }
 });

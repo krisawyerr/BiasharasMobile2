@@ -136,3 +136,15 @@ export const tradingPairs = [
     { label: 'USD/TRY', value: 'USD/TRY' },
     { label: 'USD/ZAR', value: 'USD/ZAR' },
 ];
+
+export const types = [
+    { label: 'Buy', value: 'Buy' },
+    { label: 'Sell', value: 'Sell' },
+];
+
+export const sessions = [
+    { label: 'London', value: 'London' },
+    { label: 'New York', value: 'New York' },
+    { label: 'Sydney', value: 'Sydney' },
+    { label: 'Tokyo', value: 'Tokyo' },
+];
