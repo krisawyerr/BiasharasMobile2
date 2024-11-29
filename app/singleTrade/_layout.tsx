@@ -1,12 +1,12 @@
-import { Stack, Tabs } from "expo-router";
-import { SafeAreaView, TouchableOpacity } from "react-native";
+import { Stack } from "expo-router";
+import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons"
 
 export default function SingleTradeLayout() {
     return (
         <Stack>
-            <Stack.Screen 
-                name="[id]"  
+            <Stack.Screen
+                name="[id]"
                 options={({ navigation }) => ({
                     title: "Trade Details",
                     headerTitleStyle: {
@@ -17,7 +17,7 @@ export default function SingleTradeLayout() {
                     },
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <Ionicons  name="arrow-back" size={24} color='#ccc3cc'/>
+                            <Ionicons name="arrow-back" size={24} color='#ccc3cc' />
                         </TouchableOpacity>
                     )
                 })}

@@ -12,15 +12,15 @@ export default function SingleTrade() {
     const navigation = useNavigation()
 
     useEffect(() => {
-      navigation.setOptions({
-        headerRight: () => (
-            <Link href={`/editTrade/${id}`} asChild>
-                <Pressable>
-                    <Feather name="edit" size={20} color="#ccc3cc" />
-                </Pressable>
-            </Link>
-        ),
-      });
+        navigation.setOptions({
+            headerRight: () => (
+                <Link href={`/editTrade/${id}`} asChild>
+                    <Pressable>
+                        <Feather name="edit" size={20} color="#ccc3cc" />
+                    </Pressable>
+                </Link>
+            ),
+        });
     }, [navigation]);
 
     return (
@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
     headerText: {
         width: "30%",
         color: "#e5e1e5",
-        fontWeight:700,
+        fontWeight: 700,
         fontSize: 17
     },
     infoText: {
         width: "70%",
         color: "#e5e1e5",
-        fontWeight:400,
+        fontWeight: 400,
         fontSize: 17
     }
 });

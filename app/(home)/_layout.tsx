@@ -1,7 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Image, StatusBar, Modal, View, Text, TouchableOpacity, Button, Pressable, StyleSheet } from "react-native";
-import { useState } from "react";
+import { Pressable, StyleSheet } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -19,7 +18,7 @@ export default function RootLayout() {
                 },
             }}
         >
-            <Tabs.Screen 
+            <Tabs.Screen
                 name="index"
                 options={{
                     title: "Home",
@@ -28,17 +27,17 @@ export default function RootLayout() {
                     },
                     headerStyle: {
                         backgroundColor: "#342e36",
-                        borderBottomWidth: 0, 
+                        borderBottomWidth: 0,
                         shadowOpacity: 0,
-                        elevation: 0, 
+                        elevation: 0,
                     },
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "home" : "home-outline"} size={29} color={color} />;
                     },
                 }}
             />
-            <Tabs.Screen 
-                name="trades" 
+            <Tabs.Screen
+                name="trades"
                 options={{
                     title: "Trades",
                     headerTitleStyle: {
@@ -46,17 +45,17 @@ export default function RootLayout() {
                     },
                     headerStyle: {
                         backgroundColor: "#342e36",
-                        borderBottomWidth: 0, 
+                        borderBottomWidth: 0,
                         shadowOpacity: 0,
-                        elevation: 0, 
+                        elevation: 0,
                     },
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "clipboard" : "clipboard-outline"} size={29} color={color} />;
                     },
                 }}
             />
-            <Tabs.Screen 
-                name="addTrade" 
+            <Tabs.Screen
+                name="addTrade"
                 options={{
                     tabBarButton: () => (
                         <Pressable style={styles.postButton} onPress={() => navigation.navigate('addTrade')}>
@@ -65,7 +64,7 @@ export default function RootLayout() {
                     ),
                 }}
             />
-            <Tabs.Screen 
+            <Tabs.Screen
                 name="strategies"
                 options={{
                     title: "Strategies",
@@ -74,17 +73,17 @@ export default function RootLayout() {
                     },
                     headerStyle: {
                         backgroundColor: "#342e36",
-                        borderBottomWidth: 0, 
+                        borderBottomWidth: 0,
                         shadowOpacity: 0,
-                        elevation: 0, 
+                        elevation: 0,
                     },
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "bulb" : "bulb-outline"} size={29} color={color} />;
                     },
                 }}
             />
-            <Tabs.Screen 
-                name="profile" 
+            <Tabs.Screen
+                name="profile"
                 options={{
                     title: "Setting",
                     headerTitleStyle: {
@@ -92,9 +91,9 @@ export default function RootLayout() {
                     },
                     headerStyle: {
                         backgroundColor: "#342e36",
-                        borderBottomWidth: 0, 
+                        borderBottomWidth: 0,
                         shadowOpacity: 0,
-                        elevation: 0, 
+                        elevation: 0,
                     },
                     tabBarIcon: ({ focused, color, size }) => {
                         return <Ionicons name={focused ? "settings" : "settings-outline"} size={29} color={color} />;

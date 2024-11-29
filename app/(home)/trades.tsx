@@ -1,21 +1,9 @@
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import TRADES from "../../data/trades.json";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useNavigation } from "@react-navigation/native";
-
-interface Trade {
-  currencyPair: string,
-  amountRisked: number,
-  date: string,
-  profit: number,
-  transactionId: number,
-  type: string,
-  lots: number,
-  tradingSession: string,
-  notes: string
-}
+import { Trade } from "../../types/Trade";
 
 export default function Trades() {
   const [groupedTrades, setGroupedTrades] = useState<Record<string, Trade[]>>({});
@@ -24,7 +12,7 @@ export default function Trades() {
     function groupTrades() {
       const tempHash: Record<string, Trade[]> = {};
 
-      TRADES.transactions.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()).forEach((item: Trade) => {
+      TRADES.transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).forEach((item: Trade) => {
         const formatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
         const month = formatter.format(new Date(item.date));
 
@@ -60,7 +48,7 @@ export default function Trades() {
                 <View style={styles.pnlGridCell}>
                   <View style={styles.pnlContainer}>
                     <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? "#ff2847" : "#04a205"} />
-                    <Text style={{ color: trade.profit! < 0 ? "#ff2847" : "#04a205"}}>{trade.profit}</Text>
+                    <Text style={{ color: trade.profit! < 0 ? "#ff2847" : "#04a205" }}>{trade.profit}</Text>
                   </View>
                 </View>
               </Pressable>
