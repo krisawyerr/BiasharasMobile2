@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, View, Button, Text, ScrollView, Pressable } from 'react-native'
 import DatePicker from 'react-native-neat-date-picker'
+import { tradingPairs } from '../data/pairs'
+import { Picker } from 'react-native-ui-lib'
 
 const App = () => {
   const [showDatePickerSingle, setShowDatePickerSingle] = useState(false)
   const [date, setDate] = useState(new Date());
   const openDatePickerSingle = () => setShowDatePickerSingle(true)
+  const [selectedPair, setSelectedPair] = useState();
+  const pickerRef = useRef(null);
 
   const onCancelSingle = () => {
     setShowDatePickerSingle(false)
@@ -25,10 +29,27 @@ const App = () => {
             <Text style={styles.headerText}>Date</Text>
             <Text style={styles.infoText}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
           </Pressable>
-          <View style={styles.row}>
+          <Pressable style={styles.row} onPress={() => pickerRef.current?.openExpandable?.()}>
             <Text style={styles.headerText}>Pair</Text>
-            <Text style={styles.infoText}></Text>
-          </View>
+            <Text style={styles.infoText}>{selectedPair}</Text>
+            <Picker
+              showSearch
+              searchPlaceholder="Search a language"
+              topBarProps={{title: 'Trading Pair'}}
+              searchStyle={{
+                color: "blue",
+                placeholderTextColor: "gray",
+              }}
+              ref={pickerRef}
+              value={selectedPair}
+              onChange={item => setSelectedPair(item)}
+              items={tradingPairs}
+            />
+          </Pressable>
+
+
+
+
           <View style={styles.row}>
             <Text style={styles.headerText}>Type</Text>
             <Text style={styles.infoText}></Text>
@@ -55,6 +76,7 @@ const App = () => {
           </View>
         </View>
       </ScrollView>
+
       <DatePicker
         isVisible={showDatePickerSingle}
         mode={'single'}
