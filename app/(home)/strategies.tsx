@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+import { dark } from "../../data/colors";
 
 export default function Strategies() {
   return (
@@ -11,9 +12,9 @@ export default function Strategies() {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: "#120f14"
+    backgroundColor: dark.bodyBackground
   },
   text: {
-    color: "white"
+    color: dark.headerText
   }
 });

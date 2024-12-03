@@ -5,6 +5,7 @@ import { sessions, tradingPairs, types } from '../data/formData'
 import { Picker } from 'react-native-ui-lib'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Trade } from '../types/Trade'
+import { dark } from '../data/colors'
 
 interface TradeFormProps {
     formType: string;
@@ -60,11 +61,8 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
 
     const onConfirmSingle = (output: any) => {
         setShowDatePickerSingle(false)
-        console.log(output)
         setDate(output.date)
     }
-
-    console.log(formType)
 
     return (
         <>
@@ -82,6 +80,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         <Text style={styles.headerText}>Pair</Text>
                         <Text style={styles.infoText}>{selectedPair}</Text>
                         <Picker
+                            style={{display: "none"}}
                             showSearch
                             topBarProps={{ title: 'Trading Pair' }}
                             searchStyle={{
@@ -98,6 +97,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         <Text style={styles.headerText}>Type</Text>
                         <Text style={styles.infoText}>{selectedType}</Text>
                         <Picker
+                            style={{display: "none"}}
                             topBarProps={{ title: 'Type' }}
                             ref={typeRef}
                             value={selectedType}
@@ -109,6 +109,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         <Text style={styles.headerText}>Session</Text>
                         <Text style={styles.infoText}>{selectedSession}</Text>
                         <Picker
+                            style={{display: "none"}}
                             topBarProps={{ title: 'Session' }}
                             ref={sessionRef}
                             value={selectedSession}
@@ -122,7 +123,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             style={styles.infoText}
                             ref={riskRef}
                             value={risk}
-                            onChangeText={() => setRisk}
+                            onChangeText={(e) => setRisk(e)}
                             keyboardType="numeric"
                         />
                     </Pressable>
@@ -132,7 +133,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             style={styles.infoText}
                             ref={lotsRef}
                             value={lots}
-                            onChangeText={() => setLots}
+                            onChangeText={(e) => setLots(e)}
                             keyboardType="numeric"
                         />
                     </Pressable>
@@ -142,8 +143,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             style={styles.infoText}
                             ref={profitsRef}
                             value={profits}
-                            onChangeText={() => setProfits}
-                            keyboardType="numeric"
+                            onChangeText={(e) => setProfits(e.replace(/[^-.\d]/g, '').replace(/(?!^)-/g, '').replace(/^(-?\d*\.?\d*).*$/, '$1'))}
                         />
                     </Pressable>
                     <Pressable style={styles.row} onPress={() => notesRef.current?.focus()}>
@@ -152,7 +152,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             style={styles.infoText}
                             ref={notesRef}
                             value={notes}
-                            onChangeText={() => setNotes}
+                            onChangeText={(e) => setNotes(e)}
                             multiline={true}
                         />
                     </Pressable>
@@ -185,15 +185,15 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                 onCancel={onCancelSingle}
                 onConfirm={onConfirmSingle}
                 colorOptions={{
-                    backgroundColor: "#2c2734",
-                    headerColor: "#2c2734",
-                    headerTextColor: "#cac4cd",
-                    changeYearModalColor: "#cac4cd",
-                    weekDaysColor: "white",
-                    dateTextColor: "#cac4cd",
-                    selectedDateTextColor: "#cac4cd",
-                    selectedDateBackgroundColor: "#cac4cd50",
-                    confirmButtonColor: "#cac4cd"
+                    backgroundColor: dark.sectionBackground,
+                    headerColor: dark.sectionBackground,
+                    headerTextColor: dark.headerText,
+                    changeYearModalColor: dark.headerText,
+                    weekDaysColor: dark.calendarPastDays,
+                    dateTextColor: dark.headerText,
+                    selectedDateTextColor: dark.headerText,
+                    selectedDateBackgroundColor: `${dark.headerText}50`,
+                    confirmButtonColor: dark.headerText
                 }}
             />
         </>
@@ -203,10 +203,10 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: "#120f14",
+        backgroundColor: dark.bodyBackground,
     },
     container: {
-        backgroundColor: "#2c2734",
+        backgroundColor: dark.sectionBackground,
         margin: 20,
         marginBottom: 40,
         borderRadius: 10,
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     },
     row: {
         padding: 20,
-        borderBottomColor: "#120f1460",
+        borderBottomColor: `${dark.headerBackground}60`,
         borderBottomWidth: 1,
         flexDirection: "row"
     },
@@ -224,25 +224,25 @@ const styles = StyleSheet.create({
     },
     headerText: {
         width: "30%",
-        color: "#e5e1e5",
+        color: dark.headerText,
         fontWeight: 700,
         fontSize: 17
     },
     submitText: {
         width: "30%",
-        color: "#e5e1e5",
+        color: dark.headerBackground,
         fontWeight: 700,
         fontSize: 17,
         textAlign: "center"
     },
     infoText: {
         width: "70%",
-        color: "#e5e1e5",
+        color: dark.headerText,
         fontWeight: 400,
         fontSize: 17,
     },
     editButton: {
-        backgroundColor: "#acacac",
+        backgroundColor: dark.headerText,
         padding: 13,
         margin: "auto",
         marginBottom: 10,
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     submitButton: {
-        backgroundColor: "red",
+        backgroundColor: dark.red,
         padding: 13,
         margin: "auto",
         marginBottom: 40,

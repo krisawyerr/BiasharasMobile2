@@ -1,7 +1,11 @@
 import { Stack, Tabs } from "expo-router";
-import { StatusBar } from "react-native";
+import { StatusBar, useColorScheme } from "react-native";
+import { dark } from "../data/colors";
 
 export default function RootLayout() {
+    const theme = useColorScheme();
+    console.log(theme)
+
     return (
         <>
             <StatusBar />
@@ -30,10 +34,10 @@ export default function RootLayout() {
                     options={{
                         title: "Add Item",
                         headerTitleStyle: {
-                            color: "#ccc3cc"
+                            color: dark.headerText
                         },
                         headerStyle: {
-                            backgroundColor: "#342e36",
+                            backgroundColor: dark.headerBackground,
                         },
                         presentation: "modal"
                     }}

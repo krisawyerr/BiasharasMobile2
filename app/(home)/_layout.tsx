@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
+import { dark } from "../../data/colors";
 
 export default function RootLayout() {
     const navigation = useNavigation();
@@ -10,11 +11,11 @@ export default function RootLayout() {
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: "#02b5ff",
-                tabBarInactiveTintColor: "#838283",
+                tabBarActiveTintColor: dark.tabActive,
+                tabBarInactiveTintColor: dark.tabInactive,
                 tabBarStyle: {
-                    backgroundColor: "#342e36",
-                    borderColor: "#342e36",
+                    backgroundColor: dark.headerBackground,
+                    borderColor: dark.headerBackground,
                 },
             }}
         >
@@ -23,15 +24,15 @@ export default function RootLayout() {
                 options={{
                     title: "Home",
                     headerTitleStyle: {
-                        color: "#ccc3cc"
+                        color: dark.headerText
                     },
                     headerStyle: {
-                        backgroundColor: "#342e36",
+                        backgroundColor: dark.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
                     },
-                    tabBarIcon: ({ focused, color, size }) => {
+                    tabBarIcon: ({ focused, color }) => {
                         return <Ionicons name={focused ? "home" : "home-outline"} size={29} color={color} />;
                     },
                 }}
@@ -41,10 +42,10 @@ export default function RootLayout() {
                 options={{
                     title: "Trades",
                     headerTitleStyle: {
-                        color: "#ccc3cc"
+                        color: dark.headerText
                     },
                     headerStyle: {
-                        backgroundColor: "#342e36",
+                        backgroundColor: dark.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
@@ -59,7 +60,7 @@ export default function RootLayout() {
                 options={{
                     tabBarButton: () => (
                         <Pressable style={styles.postButton} onPress={() => navigation.navigate('addTrade')}>
-                            <Ionicons name="add-circle" size={40} color="#d466e3" />
+                            <Ionicons name="add-circle" size={40} color={dark.addTradeButton} />
                         </Pressable>
                     ),
                 }}
@@ -69,15 +70,15 @@ export default function RootLayout() {
                 options={{
                     title: "Strategies",
                     headerTitleStyle: {
-                        color: "#ccc3cc"
+                        color: dark.headerText
                     },
                     headerStyle: {
-                        backgroundColor: "#342e36",
+                        backgroundColor: dark.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
                     },
-                    tabBarIcon: ({ focused, color, size }) => {
+                    tabBarIcon: ({ focused, color }) => {
                         return <Ionicons name={focused ? "bulb" : "bulb-outline"} size={29} color={color} />;
                     },
                 }}
@@ -87,15 +88,15 @@ export default function RootLayout() {
                 options={{
                     title: "Setting",
                     headerTitleStyle: {
-                        color: "#ccc3cc"
+                        color: dark.headerText
                     },
                     headerStyle: {
-                        backgroundColor: "#342e36",
+                        backgroundColor: dark.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
                     },
-                    tabBarIcon: ({ focused, color, size }) => {
+                    tabBarIcon: ({ focused, color }) => {
                         return <Ionicons name={focused ? "settings" : "settings-outline"} size={29} color={color} />;
                     },
                 }}

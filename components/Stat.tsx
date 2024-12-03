@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+import { dark } from "../data/colors";
 
 interface LineGraphInfoProps {
     title: string
@@ -10,11 +11,11 @@ interface LineGraphInfoProps {
 export default function Stat({title, value, subValue, color}: LineGraphInfoProps) {
     return (
         <View style={{flex: 1}}>
-            <View style={[styles.singleGraphInfo, {backgroundColor: `${color}95`, borderColor: color}]}>
-                <Text style={styles.header}>{value}</Text>
-                <Text style={styles.text}>{subValue}</Text>
+            <View style={[styles.singleGraphInfo, {backgroundColor: `${color}25`, borderColor: color}]}>
+                <Text style={[styles.text, {color: color}]}>{value}</Text>
+                <Text style={[styles.text, {color: `${color}95`}]}>{subValue}</Text>
             </View>
-            <Text style={styles.header}>{title}</Text>
+            <Text style={[styles.text, {color: dark.headerText}]}>{title}</Text>
         </View>
     );
 }
@@ -26,12 +27,7 @@ const styles = StyleSheet.create({
         padding: 20,
         marginBottom: 5
     },
-    header: {
-        color: "white",
-        textAlign: "center",
-    },
     text: {
-        color: "#ffffff75",
         textAlign: "center",
     },
 });

@@ -1,17 +1,18 @@
 import { Stack } from "expo-router";
+import { dark } from "../../data/colors";
 
 export default function EditTradeLayout() {
     return (
         <Stack>
-            <Stack.Screen 
+            <Stack.Screen
                 name="[id]"
                 options={{
                     title: "Edit Trade",
                     headerTitleStyle: {
-                        color: "#ccc3cc"
+                        color: dark.headerText
                     },
                     headerStyle: {
-                        backgroundColor: "#342e36",
+                        backgroundColor: dark.headerBackground,
                     },
                 }}
             />

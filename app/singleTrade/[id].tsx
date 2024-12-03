@@ -4,6 +4,7 @@ import TRADES from "../../data/trades.json";
 import { useEffect } from "react";
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from "expo-router";
+import { dark } from "../../data/colors";
 
 export default function SingleTrade() {
     const route = useRoute<any>();
@@ -16,7 +17,7 @@ export default function SingleTrade() {
             headerRight: () => (
                 <Link href={`/editTrade/${id}`} asChild>
                     <Pressable>
-                        <Feather name="edit" size={20} color="#ccc3cc" />
+                        <Feather name="edit" size={20} color={dark.headerText} />
                     </Pressable>
                 </Link>
             ),
@@ -66,10 +67,10 @@ export default function SingleTrade() {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: "#120f14",
+        backgroundColor: dark.bodyBackground,
     },
     container: {
-        backgroundColor: "#2c2734",
+        backgroundColor: dark.sectionBackground,
         margin: 20,
         marginBottom: 40,
         borderRadius: 10,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     },
     row: {
         padding: 20,
-        borderBottomColor: "#120f1460",
+        borderBottomColor: `${dark.bodyBackground}60`,
         borderBottomWidth: 1,
         flexDirection: "row"
     },
@@ -87,13 +88,13 @@ const styles = StyleSheet.create({
     },
     headerText: {
         width: "30%",
-        color: "#e5e1e5",
+        color: dark.headerText,
         fontWeight: 700,
         fontSize: 17
     },
     infoText: {
         width: "70%",
-        color: "#e5e1e5",
+        color: dark.headerText,
         fontWeight: 400,
         fontSize: 17
     }

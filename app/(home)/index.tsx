@@ -7,8 +7,9 @@ import LineGraphInfo from "../../components/LineGraphInfo";
 import PieChart from "react-native-pie-chart";
 import StatsContainer from "../../components/StatsContainer";
 import { Stats } from "../../types/Stats";
-import { formatTrades } from "../../utils/Stats";
 import { formatDollarAmount } from "../../utils/format";
+import { formatTrades } from "../../utils/stats";
+import { dark } from "../../data/colors";
 
 export default function Home() {
   const [lineData, setLineData] = useState<LineData[]>([{ x: 0, y: 0 }]);
@@ -38,14 +39,14 @@ export default function Home() {
         <View style={styles.recentsGraph}>
           <LineGraph
             lineData={lineData}
-            lineColor={"#009acb"}
+            lineColor={dark.lineGraph}
             parentContainersTotalPaddingAndMargin={60}
             widthPercentage={65}
           />
           <View style={styles.graphInfo}>
-            <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"])} color={"#b377ba"} />
-            <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high)} color={"#00c182"} />
-            <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low)} color={"#F72585"} />
+            <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"])} color={dark.statContainer1} />
+            <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high)} color={dark.statContainer2} />
+            <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low)} color={dark.statContainer3} />
           </View>
         </View>
       </View>
@@ -56,30 +57,30 @@ export default function Home() {
             <PieChart
               widthAndHeight={200}
               series={[winsAndLosses.win, winsAndLosses.lose]}
-              sliceColor={['#156283', '#009acb']}
+              sliceColor={[dark.pieChart1, dark.pieChart2]}
               coverRadius={0.5}
             />
           ) : (
-            <Text style={{ color: '#cac4cd', textAlign: 'center' }}>No data available</Text>
+            <Text style={{ color: dark.headerText, textAlign: 'center' }}>No data available</Text>
           )}
           <View style={styles.pieGraphInfoContainer}>
             <View>
-              <Text style={[styles.pieGraphInfoTextHeader, { color: "#156283" }]}>
+              <Text style={[styles.pieGraphInfoTextHeader, { color: dark.pieChart1 }]}>
                 {winsAndLosses.win}
               </Text>
-              <Text style={[styles.pieGraphInfoText, { color: "#156283" }]}>Wins</Text>
+              <Text style={[styles.pieGraphInfoText, { color: dark.pieChart1 }]}>Wins</Text>
             </View>
             <View>
-              <Text style={[styles.pieGraphInfoTextHeader, { color: "white" }]}>
+              <Text style={[styles.pieGraphInfoTextHeader, { color: dark.headerText }]}>
                 {winsAndLosses.win + winsAndLosses.lose > 0 ? `${((winsAndLosses.win / (winsAndLosses.win + winsAndLosses.lose)) * 100).toFixed(0)}%` : "0%"}
               </Text>
-              <Text style={[styles.pieGraphInfoText, { color: "white" }]}>Win Rate</Text>
+              <Text style={[styles.pieGraphInfoText, { color: dark.headerText }]}>Win Rate</Text>
             </View>
             <View>
-              <Text style={[styles.pieGraphInfoTextHeader, { color: "#009acb" }]}>
+              <Text style={[styles.pieGraphInfoTextHeader, { color: dark.pieChart2 }]}>
                 {winsAndLosses.lose}
               </Text>
-              <Text style={[styles.pieGraphInfoText, { color: "#009acb" }]}>Losses</Text>
+              <Text style={[styles.pieGraphInfoText, { color: dark.pieChart2 }]}>Losses</Text>
             </View>
           </View>
         </View>
@@ -109,7 +110,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: "#120f14",
+    backgroundColor: dark.bodyBackground,
     padding: 15,
   },
   recentsGraph: {
@@ -141,8 +142,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#563658",
-    backgroundColor: "#56365850",
+    borderColor: dark.statContainer4,
+    backgroundColor: `${dark.statContainer4}50`,
     paddingHorizontal: 20,
     paddingVertical: 10,
     width: "80%",
@@ -163,16 +164,16 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 15,
-    backgroundColor: "#2c2734",
+    backgroundColor: dark.sectionBackground,
     padding: 15,
     borderRadius: 10,
   },
   header: {
-    color: "#cac4cd",
+    color: dark.headerText,
     fontSize: 17,
     paddingBottom: 10,
     textAlign: "center",
-    borderBottomColor: "#cac4cd15",
+    borderBottomColor: `${dark.headerText}15`,
     borderBottomWidth: 1,
   },
 });
