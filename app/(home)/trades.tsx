@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Trade } from "../../types/Trade";
+import { formatDollarAmount } from "../../utils/format";
 
 export default function Trades() {
   const [groupedTrades, setGroupedTrades] = useState<Record<string, Trade[]>>({});
@@ -48,7 +49,7 @@ export default function Trades() {
                 <View style={styles.pnlGridCell}>
                   <View style={styles.pnlContainer}>
                     <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? "#ff2847" : "#04a205"} />
-                    <Text style={{ color: trade.profit! < 0 ? "#ff2847" : "#04a205" }}>{trade.profit}</Text>
+                    <Text style={{ color: trade.profit! < 0 ? "#ff2847" : "#04a205" }}>{formatDollarAmount(trade.profit)}</Text>
                   </View>
                 </View>
               </Pressable>

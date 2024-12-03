@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import { LineData } from "../types/LineData";

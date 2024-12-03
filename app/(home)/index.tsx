@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Dimensions } from "react-native";
-import Svg, { Line } from "react-native-svg";
 import TRADES from "../../data/trades.json";
 import LineGraph from "../../components/LineGraph";
 import { LineData } from "../../types/LineData";
 import LineGraphInfo from "../../components/LineGraphInfo";
 import PieChart from "react-native-pie-chart";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { formatTrades } from "../../utils/Stats";
 import StatsContainer from "../../components/StatsContainer";
 import { Stats } from "../../types/Stats";
+import { formatTrades } from "../../utils/Stats";
+import { formatDollarAmount } from "../../utils/format";
 
 export default function Home() {
   const [lineData, setLineData] = useState<LineData[]>([{ x: 0, y: 0 }]);
@@ -33,7 +31,6 @@ export default function Home() {
     getStats();
   }, []);
 
-  console.log(sessionStats)
   return (
     <ScrollView style={styles.page}>
       <View style={styles.section}>
@@ -46,9 +43,9 @@ export default function Home() {
             widthPercentage={65}
           />
           <View style={styles.graphInfo}>
-            <LineGraphInfo title={"Current"} value={lineData[lineData.length - 1]["y"].toString()} color={"#b377ba"} />
-            <LineGraphInfo title={"High"} value={highAndLow.high.toString()} color={"#00c182"} />
-            <LineGraphInfo title={"Low"} value={highAndLow.low.toString()} color={"#F72585"} />
+            <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"])} color={"#b377ba"} />
+            <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high)} color={"#00c182"} />
+            <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low)} color={"#F72585"} />
           </View>
         </View>
       </View>
@@ -66,19 +63,19 @@ export default function Home() {
             <Text style={{ color: '#cac4cd', textAlign: 'center' }}>No data available</Text>
           )}
           <View style={styles.pieGraphInfoContainer}>
-            <View style={styles.pieGraphInfo}>
+            <View>
               <Text style={[styles.pieGraphInfoTextHeader, { color: "#156283" }]}>
                 {winsAndLosses.win}
               </Text>
               <Text style={[styles.pieGraphInfoText, { color: "#156283" }]}>Wins</Text>
             </View>
-            <View style={styles.pieGraphInfo}>
+            <View>
               <Text style={[styles.pieGraphInfoTextHeader, { color: "white" }]}>
                 {winsAndLosses.win + winsAndLosses.lose > 0 ? `${((winsAndLosses.win / (winsAndLosses.win + winsAndLosses.lose)) * 100).toFixed(0)}%` : "0%"}
               </Text>
               <Text style={[styles.pieGraphInfoText, { color: "white" }]}>Win Rate</Text>
             </View>
-            <View style={styles.pieGraphInfo}>
+            <View>
               <Text style={[styles.pieGraphInfoTextHeader, { color: "#009acb" }]}>
                 {winsAndLosses.lose}
               </Text>
@@ -95,7 +92,6 @@ export default function Home() {
         worstPnL={pairStats?.worstPnL}
         bestWinRate={pairStats?.bestWinRate}
         worstWinRate={pairStats?.worstWinRate}
-
       />}
       {sessionStats && <StatsContainer
         sectionName="Session"
@@ -105,7 +101,6 @@ export default function Home() {
         worstPnL={sessionStats?.worstPnL}
         bestWinRate={sessionStats?.bestWinRate}
         worstWinRate={sessionStats?.worstWinRate}
-
       />}
     </ScrollView>
   );
@@ -123,8 +118,6 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   stats: {
-    // height: 200,
-    // flexDirection: "row",
     marginTop: 15,
     gap: 15
   },
@@ -157,11 +150,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10
 
-  },
-  pieGraphInfo: {
-    // flexDirection: "row",
-    // justifyContent: "center",
-    // gap: 10
   },
   pieGraphInfoTextHeader: {
     fontWeight: 900,

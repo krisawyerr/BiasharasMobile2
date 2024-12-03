@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Stat from "./Stat";
 import { FormattedStatData } from "../types/FormattedStatData";
+import { formatDollarAmount } from "../utils/format";
 
 interface StatsContainerProps {
     sectionName: string
@@ -20,13 +21,15 @@ export default function StatsContainer({sectionName, mostTraded, leastTraded, be
         <View style={styles.stats}>
           <View style={styles.statsRow}>
             <Stat title={"Most Traded"} value={mostTraded.pair} subValue={`${mostTraded.totalTrade} Trades`} color={"#b377ba"} />
-            <Stat title={"Best PnL"} value={bestPnL.pair} subValue={`${bestPnL.pnl}`} color={"#00c182"} />
-            <Stat title={"Best Win Rate"} value={bestWinRate.pair} subValue={`${bestWinRate.winRate}%`} color={"#00c182"} />
+            <Stat title={"Least Traded"} value={leastTraded.pair} subValue={`${leastTraded.totalTrade} Trades`} color={"#b377ba"} />
           </View>
           <View style={styles.statsRow}>
-            <Stat title={"Least Traded"} value={leastTraded.pair} subValue={`${leastTraded.totalTrade} Trades`} color={"#b377ba"} />
-            <Stat title={"Worst PnL"} value={worstPnL.pair} subValue={`${worstPnL.pnl}`} color={"#F72585"} />
-            <Stat title={"Worst Win Rate"} value={worstWinRate.pair} subValue={`${worstWinRate.winRate}%`} color={"#F72585"} />
+          <Stat title={"Best PnL"} value={bestPnL.pair} subValue={formatDollarAmount(bestPnL.pnl)} color={"#00c182"} />
+            <Stat title={"Worst PnL"} value={worstPnL.pair} subValue={formatDollarAmount(worstPnL.pnl)} color={"#F72585"} />
+          </View>
+          <View style={styles.statsRow}>
+          <Stat title={"Best Win Rate"} value={bestWinRate.pair} subValue={`${bestWinRate.winRate.toFixed(0)}%`} color={"#00c182"} />
+            <Stat title={"Worst Win Rate"} value={worstWinRate.pair} subValue={`${worstWinRate.winRate.toFixed(0)}%`} color={"#F72585"} />
           </View>
         </View>
       </View>
@@ -45,8 +48,6 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   stats: {
-    // height: 200,
-    // flexDirection: "row",
     marginTop: 15,
     gap: 15
   },
@@ -80,11 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10
 
-  },
-  pieGraphInfo: {
-    // flexDirection: "row",
-    // justifyContent: "center",
-    // gap: 10
   },
   pieGraphInfoTextHeader: {
     fontWeight: 900,
