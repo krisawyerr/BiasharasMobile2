@@ -1,9 +1,12 @@
 import { Stack } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons"
-import { dark } from "../../data/colors";
+import { dark, light } from "../../data/colors";
 
 export default function SingleTradeLayout() {
+    const theme = useColorScheme();
+    const colorTheme = theme === "light" ? light : dark
+
     return (
         <Stack>
             <Stack.Screen
@@ -11,14 +14,14 @@ export default function SingleTradeLayout() {
                 options={({ navigation }) => ({
                     title: "Trade Details",
                     headerTitleStyle: {
-                        color: dark.headerText
+                        color: colorTheme.headerText
                     },
                     headerStyle: {
-                        backgroundColor: dark.headerBackground,
+                        backgroundColor: colorTheme.headerBackground,
                     },
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <Ionicons name="arrow-back" size={24} color={dark.headerText} />
+                            <Ionicons name="arrow-back" size={24} color={colorTheme.headerText} />
                         </TouchableOpacity>
                     )
                 })}

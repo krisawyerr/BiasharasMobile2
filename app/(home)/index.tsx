@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
 import TRADES from "../../data/trades.json";
 import LineGraph from "../../components/LineGraph";
 import { LineData } from "../../types/LineData";
@@ -9,7 +9,7 @@ import StatsContainer from "../../components/StatsContainer";
 import { Stats } from "../../types/Stats";
 import { formatDollarAmount } from "../../utils/format";
 import { formatTrades } from "../../utils/stats";
-import { dark } from "../../data/colors";
+import { dark, light } from "../../data/colors";
 
 export default function Home() {
   const [lineData, setLineData] = useState<LineData[]>([{ x: 0, y: 0 }]);
@@ -18,6 +18,8 @@ export default function Home() {
   const [sessionStats, setSessionStats] = useState<Stats>();
   const [pairStats, setPairStats] = useState<Stats>();
   const trades = TRADES.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const theme = useColorScheme();
+  const colorTheme = theme === "light" ? light : dark
 
   useEffect(() => {
     function getStats() {
@@ -33,54 +35,54 @@ export default function Home() {
   }, []);
 
   return (
-    <ScrollView style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.header}>Recent</Text>
+    <ScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground }]}>
+      <View style={[styles.section, {backgroundColor: colorTheme.sectionBackground,}]}>
+        <Text style={[styles.header, {    color: colorTheme.headerText,borderBottomColor: `${colorTheme.headerText}15`,}]}>Recent</Text>
         <View style={styles.recentsGraph}>
           <LineGraph
             lineData={lineData}
-            lineColor={dark.lineGraph}
+            lineColor={colorTheme.lineGraph}
             parentContainersTotalPaddingAndMargin={60}
             widthPercentage={65}
           />
           <View style={styles.graphInfo}>
-            <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"])} color={dark.statContainer1} />
-            <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high)} color={dark.statContainer2} />
-            <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low)} color={dark.statContainer3} />
+            <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"])} color={colorTheme.statContainer1} />
+            <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high)} color={colorTheme.statContainer2} />
+            <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low)} color={colorTheme.statContainer3} />
           </View>
         </View>
       </View>
-      <View style={styles.section}>
-        <Text style={styles.header}>Win Rate</Text>
+      <View style={[styles.section, {backgroundColor: colorTheme.sectionBackground,}]}>
+        <Text style={[styles.header, {    color: colorTheme.headerText,borderBottomColor: `${colorTheme.headerText}15`,}]}>Win Rate</Text>
         <View style={styles.pieGraph}>
           {winsAndLosses.win + winsAndLosses.lose > 0 ? (
             <PieChart
               widthAndHeight={200}
               series={[winsAndLosses.win, winsAndLosses.lose]}
-              sliceColor={[dark.pieChart1, dark.pieChart2]}
+              sliceColor={[colorTheme.pieChart1, colorTheme.pieChart2]}
               coverRadius={0.5}
             />
           ) : (
-            <Text style={{ color: dark.headerText, textAlign: 'center' }}>No data available</Text>
+            <Text style={{ color: colorTheme.headerText, textAlign: 'center' }}>No data available</Text>
           )}
-          <View style={styles.pieGraphInfoContainer}>
+          <View style={[styles.pieGraphInfoContainer, { borderColor: colorTheme.statContainer4, backgroundColor: `${colorTheme.statContainer4}50` }]}>
             <View>
-              <Text style={[styles.pieGraphInfoTextHeader, { color: dark.pieChart1 }]}>
+              <Text style={[styles.pieGraphInfoTextHeader, { color: colorTheme.pieChart1 }]}>
                 {winsAndLosses.win}
               </Text>
-              <Text style={[styles.pieGraphInfoText, { color: dark.pieChart1 }]}>Wins</Text>
+              <Text style={[styles.pieGraphInfoText, { color: colorTheme.pieChart1 }]}>Wins</Text>
             </View>
             <View>
-              <Text style={[styles.pieGraphInfoTextHeader, { color: dark.headerText }]}>
+              <Text style={[styles.pieGraphInfoTextHeader, { color: colorTheme.headerText }]}>
                 {winsAndLosses.win + winsAndLosses.lose > 0 ? `${((winsAndLosses.win / (winsAndLosses.win + winsAndLosses.lose)) * 100).toFixed(0)}%` : "0%"}
               </Text>
-              <Text style={[styles.pieGraphInfoText, { color: dark.headerText }]}>Win Rate</Text>
+              <Text style={[styles.pieGraphInfoText, { color: colorTheme.headerText }]}>Win Rate</Text>
             </View>
             <View>
-              <Text style={[styles.pieGraphInfoTextHeader, { color: dark.pieChart2 }]}>
+              <Text style={[styles.pieGraphInfoTextHeader, { color: colorTheme.pieChart2 }]}>
                 {winsAndLosses.lose}
               </Text>
-              <Text style={[styles.pieGraphInfoText, { color: dark.pieChart2 }]}>Losses</Text>
+              <Text style={[styles.pieGraphInfoText, { color: colorTheme.pieChart2 }]}>Losses</Text>
             </View>
           </View>
         </View>
@@ -110,7 +112,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: dark.bodyBackground,
     padding: 15,
   },
   recentsGraph: {
@@ -142,8 +143,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: dark.statContainer4,
-    backgroundColor: `${dark.statContainer4}50`,
     paddingHorizontal: 20,
     paddingVertical: 10,
     width: "80%",
@@ -164,16 +163,13 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 15,
-    backgroundColor: dark.sectionBackground,
     padding: 15,
     borderRadius: 10,
   },
   header: {
-    color: dark.headerText,
     fontSize: 17,
     paddingBottom: 10,
     textAlign: "center",
-    borderBottomColor: `${dark.headerText}15`,
     borderBottomWidth: 1,
   },
 });

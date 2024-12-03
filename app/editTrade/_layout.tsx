@@ -1,7 +1,11 @@
 import { Stack } from "expo-router";
-import { dark } from "../../data/colors";
+import { dark, light } from "../../data/colors";
+import { useColorScheme } from "react-native";
 
 export default function EditTradeLayout() {
+    const theme = useColorScheme();
+    const colorTheme = theme === "light" ? light : dark
+
     return (
         <Stack>
             <Stack.Screen
@@ -9,10 +13,10 @@ export default function EditTradeLayout() {
                 options={{
                     title: "Edit Trade",
                     headerTitleStyle: {
-                        color: dark.headerText
+                        color: colorTheme.headerText
                     },
                     headerStyle: {
-                        backgroundColor: dark.headerBackground,
+                        backgroundColor: colorTheme.headerBackground,
                     },
                 }}
             />

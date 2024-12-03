@@ -1,21 +1,23 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, useColorScheme } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
-import { dark } from "../../data/colors";
+import { dark, light } from "../../data/colors";
 
 export default function RootLayout() {
     const navigation = useNavigation();
-
+    const theme = useColorScheme();
+    const colorTheme = theme === "light" ? light : dark
+    
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: dark.tabActive,
-                tabBarInactiveTintColor: dark.tabInactive,
+                tabBarActiveTintColor: colorTheme.tabActive,
+                tabBarInactiveTintColor: colorTheme.tabInactive,
                 tabBarStyle: {
-                    backgroundColor: dark.headerBackground,
-                    borderColor: dark.headerBackground,
+                    backgroundColor: colorTheme.headerBackground,
+                    borderColor: colorTheme.headerBackground,
                 },
             }}
         >
@@ -24,10 +26,10 @@ export default function RootLayout() {
                 options={{
                     title: "Home",
                     headerTitleStyle: {
-                        color: dark.headerText
+                        color: colorTheme.headerText
                     },
                     headerStyle: {
-                        backgroundColor: dark.headerBackground,
+                        backgroundColor: colorTheme.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
@@ -42,10 +44,10 @@ export default function RootLayout() {
                 options={{
                     title: "Trades",
                     headerTitleStyle: {
-                        color: dark.headerText
+                        color: colorTheme.headerText
                     },
                     headerStyle: {
-                        backgroundColor: dark.headerBackground,
+                        backgroundColor: colorTheme.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
@@ -60,7 +62,7 @@ export default function RootLayout() {
                 options={{
                     tabBarButton: () => (
                         <Pressable style={styles.postButton} onPress={() => navigation.navigate('addTrade')}>
-                            <Ionicons name="add-circle" size={40} color={dark.addTradeButton} />
+                            <Ionicons name="add-circle" size={40} color={colorTheme.addTradeButton} />
                         </Pressable>
                     ),
                 }}
@@ -70,10 +72,10 @@ export default function RootLayout() {
                 options={{
                     title: "Strategies",
                     headerTitleStyle: {
-                        color: dark.headerText
+                        color: colorTheme.headerText
                     },
                     headerStyle: {
-                        backgroundColor: dark.headerBackground,
+                        backgroundColor: colorTheme.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,
@@ -88,10 +90,10 @@ export default function RootLayout() {
                 options={{
                     title: "Setting",
                     headerTitleStyle: {
-                        color: dark.headerText
+                        color: colorTheme.headerText
                     },
                     headerStyle: {
-                        backgroundColor: dark.headerBackground,
+                        backgroundColor: colorTheme.headerBackground,
                         borderBottomWidth: 0,
                         shadowOpacity: 0,
                         elevation: 0,

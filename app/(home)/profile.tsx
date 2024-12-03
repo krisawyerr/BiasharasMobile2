@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
-import { dark } from "../../data/colors";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { dark, light } from "../../data/colors";
 
 export default function Profile() {
+  const theme = useColorScheme();
+  const colorTheme = theme === "light" ? light : dark
+
   return (
-    <View style={styles.page}>
-      <Text style={styles.text}>Profile</Text>
+    <View style={[styles.page, {backgroundColor: colorTheme.bodyBackground}]}>
+      <Text style={{color: colorTheme.headerText}}>Profile</Text>
     </View>
   );
 }
@@ -12,9 +15,5 @@ export default function Profile() {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: dark.bodyBackground
   },
-  text: {
-    color: dark.headerText
-  }
 });
