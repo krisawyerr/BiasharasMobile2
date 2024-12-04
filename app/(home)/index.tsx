@@ -18,6 +18,7 @@ export default function Home() {
   const [winsAndLosses, setWinsAndLosses] = useState({ win: 0, lose: 0 });
   const [sessionStats, setSessionStats] = useState<Stats>();
   const [pairStats, setPairStats] = useState<Stats>();
+  const [strategyStats, setStrategyStats] = useState<Stats>();
   const trades = TRADES.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
@@ -30,6 +31,7 @@ export default function Home() {
       setWinsAndLosses(formattedData.winsAndLosses)
       setSessionStats(formattedData.sessionStats)
       setPairStats(formattedData.pairStats)
+      setStrategyStats(formattedData.strategiesStats)
     }
 
     getStats();
@@ -105,6 +107,15 @@ export default function Home() {
         worstPnL={sessionStats?.worstPnL}
         bestWinRate={sessionStats?.bestWinRate}
         worstWinRate={sessionStats?.worstWinRate}
+      />}
+      {strategyStats && <StatsContainer
+        sectionName="Strategy"
+        mostTraded={strategyStats?.mostTraded}
+        leastTraded={strategyStats?.leastTraded}
+        bestPnL={strategyStats?.bestPnL}
+        worstPnL={strategyStats?.worstPnL}
+        bestWinRate={strategyStats?.bestWinRate}
+        worstWinRate={strategyStats?.worstWinRate}
       />}
     </ScrollView>
   );

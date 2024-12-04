@@ -7,5 +7,6 @@ export interface Trade {
     type: string,
     lots: number,
     tradingSession: string,
-    notes?: string
+    notes?: string,
+    strategyUsed: string
 }

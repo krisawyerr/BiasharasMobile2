@@ -40,6 +40,17 @@ export default function Trades() {
       {Object.entries(groupedTrades).map(([month, trades]) => (
         <View key={month} style={[styles.section, { backgroundColor: colorTheme.sectionBackground, }]}>
           <Text style={[styles.header, { color: colorTheme.headerText, }]}>{month}</Text>
+          <View style={[styles.tradeItem, { backgroundColor: colorTheme.sectionBackground, borderTopColor: `${colorTheme.headerText}00`, }]}>
+            <View style={styles.dateGridCell}>
+              <Text style={[styles.date, { color: colorTheme.headerText, }]}>Date</Text>
+            </View>
+            <View style={styles.gridCell}>
+              <Text style={[styles.date, { color: colorTheme.headerText, }]}>Type</Text>
+            </View>
+            <View style={styles.pnlGridCell}>
+              <Text style={[styles.date, { color: colorTheme.headerText, }]}>Profit</Text>
+            </View>
+          </View>
           {trades.map(trade => (
             <Pressable onPress={() => router.push(`/singleTrade/${trade.transactionId}`)} key={trade.transactionId} style={[styles.tradeItem, { backgroundColor: colorTheme.sectionBackground, borderTopColor: `${colorTheme.headerText}15`, }]}>
               <View style={styles.dateGridCell}>

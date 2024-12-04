@@ -8,10 +8,16 @@ import { Trade } from '../types/Trade'
 import { dark, light } from '../data/colors'
 import { useTheme } from '../context/ThemeContext'
 import { useNavigation } from 'expo-router'
+import STRATEGIES from "../data/strategies.json"
 
 interface TradeFormProps {
     formType: string;
     trade?: Trade;
+}
+
+interface StrategyList {
+    label: string;
+    value: string
 }
 
 interface PickerRef {
@@ -26,20 +32,35 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
     const [date, setDate] = useState<Date>(new Date());
     const openDatePickerSingle = () => setShowDatePickerSingle(true)
     const [selectedPair, setSelectedPair] = useState<string | undefined>();
+    const [selectedStrategy, setSelectedStrategy] = useState<string | undefined>();
     const [selectedType, setSelectedType] = useState<string | undefined>();
     const [selectedSession, setSelectedSession] = useState<string | undefined>();
+    const [strategiesList, setStrategiesList] = useState<StrategyList[]>();
     const [risk, setRisk] = useState<string>();
     const [lots, setLots] = useState<string>();
     const [profits, setProfits] = useState<string>();
     const [notes, setNotes] = useState<string>();
 
     const pairRef = useRef<PickerRef>(null);
+    const strategyRef = useRef<PickerRef>(null);
     const typeRef = useRef<PickerRef>(null);
     const sessionRef = useRef<PickerRef>(null);
     const riskRef = useRef<TextInput>(null);
     const lotsRef = useRef<TextInput>(null);
     const profitsRef = useRef<TextInput>(null);
     const notesRef = useRef<TextInput>(null);
+
+    useEffect(() => {
+        if (formType === "edit") {
+            let list: StrategyList[] = []
+
+            STRATEGIES.strategies.forEach(item => {
+                list.push({ label: item.name, value: item.name })
+            })
+
+            setStrategiesList(list)
+        }
+    }, [STRATEGIES]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -57,6 +78,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
             if (formType === "edit") {
                 setDate(new Date(trade!.date))
                 setSelectedPair(trade!.currencyPair)
+                setSelectedStrategy(trade!.strategyUsed)
                 setSelectedType(trade!.type)
                 setSelectedSession(trade!.tradingSession)
                 setRisk(trade!.amountRisked.toString())
@@ -90,6 +112,23 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                     <Pressable onPress={openDatePickerSingle} style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]}>
                         <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Date</Text>
                         <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
+                    </Pressable>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => strategyRef.current?.openExpandable?.()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Strategy</Text>
+                        <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedStrategy}</Text>
+                        <Picker
+                            style={{ display: "none" }}
+                            showSearch
+                            topBarProps={{ title: 'Trading Strategy' }}
+                            searchStyle={{
+                                color: "blue",
+                                placeholderTextColor: "gray",
+                            }}
+                            ref={strategyRef}
+                            value={selectedPair}
+                            onChange={item => setSelectedStrategy(item?.toString() || undefined)}
+                            items={strategiesList}
+                        />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => pairRef.current?.openExpandable?.()}>
                         <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Pair</Text>

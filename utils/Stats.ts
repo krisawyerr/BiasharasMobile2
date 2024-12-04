@@ -1,6 +1,7 @@
 import { FormattedStatData } from "../types/FormattedStatData";
 import { LineData } from "../types/LineData";
 import { Stats } from "../types/Stats";
+import { StrategyData } from "../types/StrategyData";
 import { Trade } from "../types/Trade";
 
 interface StatData {
@@ -16,6 +17,7 @@ export function formatTrades(trade: Trade[]) {
     let winsAndLosses = { win: 0, lose: 0 };
     let sessionsData: Record<string, StatData> = {};
     let pairsData: Record<string, StatData> = {};
+    let strategiesData: Record<string, StatData> = {};
 
     trade.forEach((item) => {
         if (position.index === 0) {
@@ -49,6 +51,15 @@ export function formatTrades(trade: Trade[]) {
         else pair.losses++;
 
         pairsData[item.currencyPair] = pair;
+
+        if (item.strategyUsed !== "none") {
+            const strategy = strategiesData[item.strategyUsed] || { wins: 0, losses: 0, pnl: 0 };
+            strategy.pnl += item.profit;
+            if (item.profit >= 0) strategy.wins++;
+            else strategy.losses++;
+
+            strategiesData[item.strategyUsed] = strategy;
+        }
     });
 
     const formatData = (data: Record<string, StatData>) => {
@@ -59,8 +70,9 @@ export function formatTrades(trade: Trade[]) {
         });
     };
 
-    const formattedPairsData = formatData(pairsData);
-    const formattedSessionsData = formatData(sessionsData);
+    const formattedPairsData: StrategyData[] = formatData(pairsData);
+    const formattedSessionsData: StrategyData[] = formatData(sessionsData);
+    const formattedStrategiesData: StrategyData[] = formatData(strategiesData);
 
     const getStats = (formattedData: FormattedStatData[]) => {
         return {
@@ -75,6 +87,7 @@ export function formatTrades(trade: Trade[]) {
 
     const pairStats: Stats = getStats(formattedPairsData);
     const sessionStats: Stats = getStats(formattedSessionsData);
+    const strategiesStats: Stats = getStats(formattedStrategiesData);
 
-    return { data, highAndLow, winsAndLosses, sessionStats, pairStats };
+    return { data, highAndLow, winsAndLosses, sessionStats, pairStats, strategiesStats, formattedStrategiesData };
 }

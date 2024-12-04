@@ -35,6 +35,10 @@ export default function SingleTrade() {
                     <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{new Date(trade!.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
                 </View>
                 <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
+                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Strategy</Text>
+                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade!.strategyUsed}</Text>
+                </View>
+                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
                     <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Pair</Text>
                     <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade!.currencyPair}</Text>
                 </View>
