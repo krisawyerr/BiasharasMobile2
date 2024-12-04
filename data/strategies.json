@@ -1,0 +1,85 @@
+{
+    "strategies ": [
+        {
+          "trade_id": 1,
+          "trade_name": "Breakout Strategy",
+          "style": "Day Trade",
+          "currency_pair": "EUR/USD",
+          "timeframe": "15M",
+          "detail": "This strategy identifies key support and resistance levels, then places buy stops above resistance and sell stops below support to catch breakouts."
+        },
+        {
+          "trade_id": 2,
+          "trade_name": "Fibonacci Retracement",
+          "style": "Swing Trade",
+          "currency_pair": "GBP/USD",
+          "timeframe": "4H",
+          "detail": "This strategy uses Fibonacci levels to identify potential retracement zones during a trending market and places trades at key levels like 38.2%, 50%, or 61.8%."
+        },
+        {
+          "trade_id": 3,
+          "trade_name": "Scalping with Moving Averages",
+          "style": "Scalping",
+          "currency_pair": "USD/JPY",
+          "timeframe": "1M",
+          "detail": "This scalping strategy uses the crossover of 5 EMA and 20 EMA to identify short-term trading opportunities in high volatility periods."
+        },
+        {
+          "trade_id": 4,
+          "trade_name": "Price Action Reversal",
+          "style": "Day Trade",
+          "currency_pair": "AUD/USD",
+          "timeframe": "1H",
+          "detail": "This strategy looks for reversal candlestick patterns, such as pin bars or engulfing bars, near key support or resistance levels."
+        },
+        {
+          "trade_id": 5,
+          "trade_name": "Trend Following with RSI",
+          "style": "Swing Trade",
+          "currency_pair": "USD/CAD",
+          "timeframe": "1D",
+          "detail": "This strategy follows the trend using a 50-period moving average while using RSI to confirm overbought or oversold conditions for entries."
+        },
+        {
+          "trade_id": 6,
+          "trade_name": "Pivot Point Scalping",
+          "style": "Scalping",
+          "currency_pair": "EUR/JPY",
+          "timeframe": "5M",
+          "detail": "This strategy uses daily pivot points as key levels for quick scalping opportunities, with trades placed near the pivot, resistance, or support levels."
+        },
+        {
+          "trade_id": 7,
+          "trade_name": "News Trading Strategy",
+          "style": "Day Trade",
+          "currency_pair": "NZD/USD",
+          "timeframe": "30M",
+          "detail": "This strategy focuses on high-impact economic news releases, such as GDP or interest rate decisions, to trade based on market reactions."
+        },
+        {
+          "trade_id": 8,
+          "trade_name": "Mean Reversion Strategy",
+          "style": "Swing Trade",
+          "currency_pair": "EUR/CHF",
+          "timeframe": "1H",
+          "detail": "This strategy identifies overextended price movements away from the mean, using Bollinger Bands to time reversion entries."
+        },
+        {
+          "trade_id": 9,
+          "trade_name": "Supply and Demand Zones",
+          "style": "Day Trade",
+          "currency_pair": "USD/CHF",
+          "timeframe": "1H",
+          "detail": "This strategy marks key supply and demand zones and waits for price to return to these areas, entering on confirmation of a reversal."
+        },
+        {
+          "trade_id": 10,
+          "trade_name": "Momentum Breakout",
+          "style": "Scalping",
+          "currency_pair": "GBP/JPY",
+          "timeframe": "1M",
+          "detail": "This strategy uses a momentum indicator, such as MACD or Stochastic, to confirm high-volume breakouts in fast-moving markets."
+        }
+      ]
+      
+}
