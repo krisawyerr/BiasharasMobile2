@@ -5,9 +5,10 @@ import { useEffect } from "react";
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from "expo-router";
 import { dark, light } from "../../data/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function SingleTrade() {
-    const theme = useColorScheme();
+    const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
     const route = useRoute<any>();
     const { id } = route.params;

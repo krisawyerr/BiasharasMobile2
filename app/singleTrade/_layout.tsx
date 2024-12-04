@@ -2,9 +2,10 @@ import { Stack } from "expo-router";
 import { TouchableOpacity, useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons"
 import { dark, light } from "../../data/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function SingleTradeLayout() {
-    const theme = useColorScheme();
+    const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
 
     return (

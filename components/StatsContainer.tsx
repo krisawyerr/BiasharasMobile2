@@ -4,6 +4,7 @@ import Stat from "./Stat";
 import { FormattedStatData } from "../types/FormattedStatData";
 import { formatDollarAmount } from "../utils/format";
 import { dark, light } from "../data/colors";
+import { useTheme } from "../context/ThemeContext";
 
 interface StatsContainerProps {
   sectionName: string
@@ -16,7 +17,7 @@ interface StatsContainerProps {
 }
 
 export default function StatsContainer({ sectionName, mostTraded, leastTraded, bestPnL, worstPnL, bestWinRate, worstWinRate }: StatsContainerProps) {
-  const theme = useColorScheme();
+  const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
 
   return (

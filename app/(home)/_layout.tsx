@@ -4,10 +4,11 @@ import { Pressable, StyleSheet, useColorScheme } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
 import { dark, light } from "../../data/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function RootLayout() {
     const navigation = useNavigation();
-    const theme = useColorScheme();
+    const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
     
     return (

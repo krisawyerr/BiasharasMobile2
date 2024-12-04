@@ -6,10 +6,11 @@ import { Link, useNavigation, useRouter } from "expo-router";
 import { Trade } from "../../types/Trade";
 import { formatDollarAmount } from "../../utils/format";
 import { dark, light } from "../../data/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Trades() {
   const router = useRouter();
-  const theme = useColorScheme();
+  const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
   const [groupedTrades, setGroupedTrades] = useState<Record<string, Trade[]>>({});
 

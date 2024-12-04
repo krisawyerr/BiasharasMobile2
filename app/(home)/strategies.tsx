@@ -1,8 +1,9 @@
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
 import { dark, light } from "../../data/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Strategies() {
-  const theme = useColorScheme();
+  const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
 
   return (

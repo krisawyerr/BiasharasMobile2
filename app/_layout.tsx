@@ -1,13 +1,11 @@
 import { Stack, Tabs } from "expo-router";
 import { StatusBar, useColorScheme } from "react-native";
 import { dark, light } from "../data/colors";
+import { ThemeProvider, useTheme } from "../context/ThemeContext";
 
 export default function RootLayout() {
-    const theme = useColorScheme();
-    const colorTheme = theme === "light" ? light : dark
-
     return (
-        <>
+        <ThemeProvider>
             <StatusBar />
             <Stack>
                 <Stack.Screen
@@ -33,16 +31,10 @@ export default function RootLayout() {
                     name="addTrade"
                     options={{
                         title: "Add Item",
-                        headerTitleStyle: {
-                            color: colorTheme.headerText
-                        },
-                        headerStyle: {
-                            backgroundColor: colorTheme.headerBackground,
-                        },
                         presentation: "modal"
                     }}
                 />
             </Stack>
-        </>
+        </ThemeProvider>
     );
 }

@@ -6,6 +6,8 @@ import { Picker } from 'react-native-ui-lib'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Trade } from '../types/Trade'
 import { dark, light } from '../data/colors'
+import { useTheme } from '../context/ThemeContext'
+import { useNavigation } from 'expo-router'
 
 interface TradeFormProps {
     formType: string;
@@ -17,7 +19,8 @@ interface PickerRef {
 }
 
 export default function TradeForm({ formType, trade }: TradeFormProps) {
-    const theme = useColorScheme();
+    const { theme } = useTheme();
+    const navigation = useNavigation()
     const colorTheme = theme === "light" ? light : dark
     const [showDatePickerSingle, setShowDatePickerSingle] = useState<boolean>(false)
     const [date, setDate] = useState<Date>(new Date());
@@ -38,6 +41,16 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
     const profitsRef = useRef<TextInput>(null);
     const notesRef = useRef<TextInput>(null);
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerTitleStyle: {
+                color: colorTheme.headerText
+            },
+            headerStyle: {
+                backgroundColor: colorTheme.headerBackground,
+            },
+        });
+    }, [navigation]);
 
     useEffect(() => {
         function setValues() {
@@ -69,20 +82,20 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
     return (
         <>
             <KeyboardAwareScrollView
-                style={[styles.page, {backgroundColor: colorTheme.bodyBackground,}]}
+                style={[styles.page, { backgroundColor: colorTheme.bodyBackground, }]}
                 keyboardShouldPersistTaps="handled"
                 enableAutomaticScroll
             >
-                <View style={[styles.container, {backgroundColor: colorTheme.sectionBackground,}]}>
-                    <Pressable onPress={openDatePickerSingle} style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Date</Text>
-                        <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
+                <View style={[styles.container, { backgroundColor: colorTheme.sectionBackground, }]}>
+                    <Pressable onPress={openDatePickerSingle} style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Date</Text>
+                        <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => pairRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Pair</Text>
-                        <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{selectedPair}</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => pairRef.current?.openExpandable?.()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Pair</Text>
+                        <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedPair}</Text>
                         <Picker
-                            style={{display: "none"}}
+                            style={{ display: "none" }}
                             showSearch
                             topBarProps={{ title: 'Trading Pair' }}
                             searchStyle={{
@@ -95,11 +108,11 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             items={tradingPairs}
                         />
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => typeRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Type</Text>
-                        <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{selectedType}</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => typeRef.current?.openExpandable?.()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Type</Text>
+                        <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedType}</Text>
                         <Picker
-                            style={{display: "none"}}
+                            style={{ display: "none" }}
                             topBarProps={{ title: 'Type' }}
                             ref={typeRef}
                             value={selectedType}
@@ -107,11 +120,11 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             items={types}
                         />
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => sessionRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Session</Text>
-                        <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{selectedSession}</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => sessionRef.current?.openExpandable?.()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Session</Text>
+                        <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedSession}</Text>
                         <Picker
-                            style={{display: "none"}}
+                            style={{ display: "none" }}
                             topBarProps={{ title: 'Session' }}
                             ref={sessionRef}
                             value={selectedSession}
@@ -119,39 +132,39 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                             items={sessions}
                         />
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => riskRef.current?.focus()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Risk</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => riskRef.current?.focus()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Risk</Text>
                         <TextInput
-                            style={[styles.infoText, {color: colorTheme.headerText,}]}
+                            style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={riskRef}
                             value={risk}
                             onChangeText={(e) => setRisk(e)}
                             keyboardType="numeric"
                         />
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => lotsRef.current?.focus()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Lots</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => lotsRef.current?.focus()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Lots</Text>
                         <TextInput
-                            style={[styles.infoText, {color: colorTheme.headerText,}]}
+                            style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={lotsRef}
                             value={lots}
                             onChangeText={(e) => setLots(e)}
                             keyboardType="numeric"
                         />
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => profitsRef.current?.focus()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Profit</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => profitsRef.current?.focus()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Profit</Text>
                         <TextInput
-                            style={[styles.infoText, {color: colorTheme.headerText,}]}
+                            style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={profitsRef}
                             value={profits}
                             onChangeText={(e) => setProfits(e.replace(/[^-.\d]/g, '').replace(/(?!^)-/g, '').replace(/^(-?\d*\.?\d*).*$/, '$1'))}
                         />
                     </Pressable>
-                    <Pressable style={[styles.row, {borderBottomColor: `${colorTheme.headerBackground}60`,}]} onPress={() => notesRef.current?.focus()}>
-                        <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Notes</Text>
+                    <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => notesRef.current?.focus()}>
+                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Notes</Text>
                         <TextInput
-                            style={[styles.infoText, {color: colorTheme.headerText,}]}
+                            style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={notesRef}
                             value={notes}
                             onChangeText={(e) => setNotes(e)}
@@ -161,20 +174,20 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                 </View>
                 {formType === "add" ? (
                     <Pressable>
-                        <View style={[styles.editButton, {backgroundColor: colorTheme.headerText,}]}>
-                            <Text style={[styles.submitText, {color: colorTheme.headerBackground,}]}>Add Trade</Text>
+                        <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
+                            <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Add Trade</Text>
                         </View>
                     </Pressable>
                 ) : (
                     <>
                         <Pressable>
-                            <View style={[styles.editButton, {backgroundColor: colorTheme.headerText,}]}>
-                                <Text style={[styles.submitText, {color: colorTheme.headerBackground,}]}>Edit Trade</Text>
+                            <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
+                                <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Edit Trade</Text>
                             </View>
                         </Pressable>
                         <Pressable>
-                            <View style={[styles.submitButton, {backgroundColor: colorTheme.red,}]}>
-                                <Text style={[styles.submitText, {color: colorTheme.headerBackground,}]}>Delete Trade</Text>
+                            <View style={[styles.submitButton, { backgroundColor: colorTheme.red, }]}>
+                                <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Delete Trade</Text>
                             </View>
                         </Pressable>
                     </>

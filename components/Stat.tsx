@@ -1,5 +1,6 @@
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
 import { dark, light } from "../data/colors";
+import { useTheme } from "../context/ThemeContext";
 
 interface LineGraphInfoProps {
     title: string
@@ -9,7 +10,7 @@ interface LineGraphInfoProps {
 }
 
 export default function Stat({title, value, subValue, color}: LineGraphInfoProps) {
-    const theme = useColorScheme();
+    const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
 
     return (

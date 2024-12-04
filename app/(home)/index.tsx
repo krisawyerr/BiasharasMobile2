@@ -10,6 +10,7 @@ import { Stats } from "../../types/Stats";
 import { formatDollarAmount } from "../../utils/format";
 import { formatTrades } from "../../utils/stats";
 import { dark, light } from "../../data/colors";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Home() {
   const [lineData, setLineData] = useState<LineData[]>([{ x: 0, y: 0 }]);
@@ -18,7 +19,7 @@ export default function Home() {
   const [sessionStats, setSessionStats] = useState<Stats>();
   const [pairStats, setPairStats] = useState<Stats>();
   const trades = TRADES.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  const theme = useColorScheme();
+  const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
 
   useEffect(() => {
