@@ -6,15 +6,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { dark, light } from '../data/colors'
 import { useTheme } from '../context/ThemeContext'
 import { useNavigation } from 'expo-router'
-
-interface Strategy {
-    id: number,
-    name: string,
-    style: string,
-    currency_pair: string,
-    timeframe: string,
-    detail: string
-}
+import { Strategy } from '../types/Strategy'
+import { createStrategy, deleteStrategy, updateStrategy } from '../utils/firebase/strategies'
+import { changeStrategyAfterupdate, removeStrategyAfterDeletion } from '../utils/firebase/trades'
 
 interface TradeFormProps {
     formType: string;
@@ -39,6 +33,13 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
     const pairsRef = useRef<PickerRef>(null);
     const timeframeRef = useRef<PickerRef>(null);
     const detailsRef = useRef<TextInput>(null);
+    const [formHandling, setFormHandling] = useState({
+        name: true,
+        style: true,
+        pair: true,
+        timeframe: true,
+        details: true,
+    })
 
     useEffect(() => {
         navigation.setOptions({
@@ -66,11 +67,80 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
 
     }, [strategy])
 
+    function validateForm() {
+        setFormHandling({
+            name: name !== undefined,
+            style: selectedStyles !== undefined,
+            pair: selectedPairs !== undefined,
+            timeframe: selectedTimeframe !== undefined,
+            details: details !== undefined,
+        })
+
+        return Boolean(name !== undefined && selectedStyles !== undefined && selectedPairs !== undefined && selectedTimeframe !== undefined && details !== undefined)
+    }
+
+    async function addStrategy() {
+        const validation = validateForm()
+
+        if (!validation) {
+            console.log("form not complete")
+            return
+        }
+
+        await createStrategy({
+            currency_pair: selectedPairs,
+            detail: details,
+            strategyId: `${new Date().getTime()}`,
+            name: name,
+            style: selectedStyles,
+            timeframe: selectedTimeframe
+        });
+
+        navigation.goBack()
+    };
+
+    async function editStrategy(strategyId: string, strategyName: string) {
+        await updateStrategy(strategyId, {
+            currency_pair: selectedPairs,
+            detail: details,
+            strategyId: strategy!.strategyId,
+            name: name,
+            style: selectedStyles,
+            timeframe: selectedTimeframe
+        });
+
+        if (name !== strategy?.name) await changeStrategyAfterupdate(strategyName, `${name}`)  
+
+        navigation.goBack()
+    };
+
+    // {
+    //     id: string,
+    //     currencyPair: string,
+    //     amountRisked: number,
+    //     date: string,
+    //     profit: number,
+    //     transactionId: number,
+    //     type: string,
+    //     lots: number,
+    //     tradingSession: string,
+    //     notes?: string,
+    //     strategyUsed: string
+    // }
+
+    async function handleDeleteStrategy(strategyId: string, strategyName: string) {
+        await deleteStrategy(strategyId)
+        await removeStrategyAfterDeletion(strategyName)
+
+        navigation.pop();
+        navigation.navigate('(home)', { screen: 'strategies' });
+    };
+
     return (
         <KeyboardAwareScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground, }]} keyboardShouldPersistTaps="handled" enableAutomaticScroll >
             <View style={[styles.container, { backgroundColor: colorTheme.sectionBackground, }]}>
                 <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => nameRef.current?.focus()}>
-                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Name</Text>
+                    <Text style={[styles.headerText, { color: formHandling.name ? colorTheme.headerText : colorTheme.red }]}>Name</Text>
                     <TextInput
                         style={[styles.infoText, { color: colorTheme.headerText, }]}
                         ref={nameRef}
@@ -79,7 +149,7 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
                     />
                 </Pressable>
                 <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => stylesRef.current?.openExpandable?.()}>
-                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Styles</Text>
+                    <Text style={[styles.headerText, { color: formHandling.style ? colorTheme.headerText : colorTheme.red }]}>Styles</Text>
                     <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedStyles}</Text>
                     <Picker
                         style={{ display: "none" }}
@@ -96,7 +166,7 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
                     />
                 </Pressable>
                 <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => pairsRef.current?.openExpandable?.()}>
-                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Pairs</Text>
+                    <Text style={[styles.headerText, { color: formHandling.pair ? colorTheme.headerText : colorTheme.red }]}>Pairs</Text>
                     <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedPairs}</Text>
                     <Picker
                         style={{ display: "none" }}
@@ -113,7 +183,7 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
                     />
                 </Pressable>
                 <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => timeframeRef.current?.openExpandable?.()}>
-                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Timeframe</Text>
+                    <Text style={[styles.headerText, { color: formHandling.timeframe ? colorTheme.headerText : colorTheme.red }]}>Timeframe</Text>
                     <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedTimeframe}</Text>
                     <Picker
                         style={{ display: "none" }}
@@ -130,7 +200,7 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
                     />
                 </Pressable>
                 <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => detailsRef.current?.focus()}>
-                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Details</Text>
+                    <Text style={[styles.headerText, { color: formHandling.details ? colorTheme.headerText : colorTheme.red }]}>Details</Text>
                     <TextInput
                         style={[styles.infoText, { color: colorTheme.headerText, }]}
                         ref={detailsRef}
@@ -141,19 +211,19 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
                 </Pressable>
             </View>
             {formType === "add" ? (
-                <Pressable>
+                <Pressable onPress={() => addStrategy()}>
                     <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
                         <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Add Strategy</Text>
                     </View>
                 </Pressable>
             ) : (
                 <>
-                    <Pressable>
+                    <Pressable onPress={() => editStrategy(strategy!.id, strategy!.name)}>
                         <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
                             <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Edit Strategy</Text>
                         </View>
                     </Pressable>
-                    <Pressable>
+                    <Pressable onPress={() => handleDeleteStrategy(strategy!.id, strategy!.name)}>
                         <View style={[styles.submitButton, { backgroundColor: colorTheme.red, }]}>
                             <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Delete Strategy</Text>
                         </View>

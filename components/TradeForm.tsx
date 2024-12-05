@@ -151,7 +151,6 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
             strategyUsed: selectedStrategy,
             notes: notes || "",
         });
-        console.log("10")
 
         navigation.goBack()
     };
@@ -193,8 +192,6 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
         navigation.pop();
         navigation.navigate('(home)', { screen: 'trades' });
     };
-
-    console.log(formHandling.formValidated)
 
     return (
         <>

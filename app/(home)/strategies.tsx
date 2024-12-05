@@ -10,15 +10,34 @@ import { formatTrades } from "../../utils/stats";
 import { StrategyData } from "../../types/StrategyData";
 import { Ionicons } from "@expo/vector-icons";
 import Stat from "../../components/Stat";
+import { subscribeToStrategies } from "../../utils/firebase/strategies";
+import { Strategy } from "../../types/Strategy";
+import { subscribeToTrades } from "../../utils/firebase/trades";
+import { Trade } from "../../types/Trade";
+import NoData from "../../components/NoData";
 
 export default function Strategies() {
   const router = useRouter();
   const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
-  const trades = TRADES.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  const strategies = STRATEGIES.strategies
+  // const trades = TRADES.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  // const strategies = STRATEGIES.strategies
   const [strategyStats, setStrategyStats] = useState<StrategyData[]>([]);
   const navigation = useNavigation()
+  const [strategies, setStrategies] = useState<Strategy[]>([]);
+  const [allTrades, setAllTrades] = useState<Trade[]>([]);
+  const trades = allTrades.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const unsubscribeStrats = subscribeToStrategies(setStrategies);
+    return () => unsubscribeStrats();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribeTrades = subscribeToTrades(setAllTrades);
+    return () => unsubscribeTrades();
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -31,13 +50,29 @@ export default function Strategies() {
   }, [navigation]);
 
   useEffect(() => {
-    function getStats() {
-      const formattedData = formatTrades(trades)
-      setStrategyStats(formattedData.formattedStrategiesData)
-    }
+    if (trades.length > 0) {
+      function getStats() {
+        const formattedData = formatTrades(trades)
+        setStrategyStats(formattedData.formattedStrategiesData)
+      }
 
-    getStats();
-  }, []);
+      getStats();
+    }
+  }, [trades]);
+
+  useEffect(() => {
+    if (strategies.length > 0) {
+      setLoading(false);
+    }
+  }, [strategies]);
+
+  if (loading) return <Text></Text>;
+  if (strategies.length === 0) return (
+    <NoData
+      header="No Strategies Available"
+      text="To see your strategies, please add some strategies. Once your information is submitted, the strategies will be displayed here."
+    />
+  )
 
   return (
     <ScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground, }]}>
@@ -63,10 +98,10 @@ export default function Strategies() {
                 <Text style={[styles.type, { color: `${colorTheme.headerText}75`, }]}>{strategy.style}</Text>
               </View>
               <View style={styles.pnlGridCell}>
-                <Stat value={stats?.totalTrade.toString() || ""} color={colorTheme.statContainer1} />
+                <Stat value={stats?.totalTrade.toString() || "0"} color={colorTheme.statContainer1} />
               </View>
               <View style={styles.pnlGridCell}>
-                <Stat value={`${stats?.winRate.toFixed(0)}%` || ""} color={colorTheme.statContainer1} />
+                <Stat value={stats ? `${stats?.winRate.toFixed(0)}%` : "Undefined"} color={colorTheme.statContainer1} />
               </View>
             </Pressable>
           )
