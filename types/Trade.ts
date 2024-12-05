@@ -1,4 +1,5 @@
 export interface Trade {
+    id: string,
     currencyPair: string,
     amountRisked: number,
     date: string,
