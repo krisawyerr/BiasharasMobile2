@@ -7,6 +7,7 @@ import { Trade } from "../../types/Trade";
 import { formatDollarAmount } from "../../utils/format";
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
+import Stat from "../../components/Stat";
 
 export default function Trades() {
   const router = useRouter();
@@ -62,10 +63,14 @@ export default function Trades() {
                 <Text style={[styles.date, { color: colorTheme.headerText, }]}>{trade.currencyPair}</Text>
               </View>
               <View style={styles.pnlGridCell}>
-                <View style={[styles.pnlContainer, { backgroundColor: colorTheme.tradesPnlBackground, }]}>
+                {/* <View style={[styles.pnlContainer, { backgroundColor: colorTheme.tradesPnlBackground, }]}>
                   <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? colorTheme.red : colorTheme.green} />
                   <Text style={{ color: trade.profit! < 0 ? colorTheme.red : colorTheme.green }}>{formatDollarAmount(trade.profit)}</Text>
-                </View>
+                </View> */}
+                <Stat 
+                  value={formatDollarAmount(trade.profit)} 
+                  color={trade.profit! < 0 ? colorTheme.red : colorTheme.green}                
+                />
               </View>
             </Pressable>
           ))}
@@ -93,13 +98,14 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   dateGridCell: {
-    width: '10%',
+    width: '15%',
+    justifyContent: "center"
   },
   pnlGridCell: {
-    width: '50%',
+    width: '40%',
   },
   gridCell: {
-    width: "40%",
+    width: "45%",
     justifyContent: "center"
   },
   header: {

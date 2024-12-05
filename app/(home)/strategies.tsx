@@ -9,6 +9,7 @@ import STRATEGIES from "../../data/strategies.json"
 import { formatTrades } from "../../utils/stats";
 import { StrategyData } from "../../types/StrategyData";
 import { Ionicons } from "@expo/vector-icons";
+import Stat from "../../components/Stat";
 
 export default function Strategies() {
   const router = useRouter();
@@ -62,14 +63,10 @@ export default function Strategies() {
                 <Text style={[styles.type, { color: `${colorTheme.headerText}75`, }]}>{strategy.style}</Text>
               </View>
               <View style={styles.pnlGridCell}>
-                <View style={[styles.pnlContainer, { backgroundColor: colorTheme.tradesPnlBackground, }]}>
-                  <Text style={{ color: colorTheme.statContainer1 }}>{stats?.totalTrade}</Text>
-                </View>
+                <Stat value={stats?.totalTrade.toString() || ""} color={colorTheme.statContainer1} />
               </View>
               <View style={styles.pnlGridCell}>
-                <View style={[styles.pnlContainer, { backgroundColor: colorTheme.tradesPnlBackground, }]}>
-                  <Text style={{ color: colorTheme.statContainer1 }}>{stats?.winRate.toFixed(0)}%</Text>
-                </View>
+                <Stat value={`${stats?.winRate.toFixed(0)}%` || ""} color={colorTheme.statContainer1} />
               </View>
             </Pressable>
           )
@@ -97,10 +94,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   titleGridCell: {
-    width: '60%',
+    width: '49%',
+    justifyContent: "center",
+    marginRight: '1%'
   },
   pnlGridCell: {
-    width: '19%',
+    width: '24%',
     marginHorizontal: '0.5%'
   },
   gridCell: {

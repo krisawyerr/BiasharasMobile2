@@ -221,12 +221,12 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                     <>
                         <Pressable>
                             <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
-                                <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Edit Trade</Text>
+                                <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Edit Trade</Text>
                             </View>
                         </Pressable>
                         <Pressable>
                             <View style={[styles.submitButton, { backgroundColor: colorTheme.red, }]}>
-                                <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Delete Trade</Text>
+                                <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Delete Trade</Text>
                             </View>
                         </Pressable>
                     </>
@@ -304,5 +304,11 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         minWidth: 250,
         alignItems: "center"
-    }
+    },
+    buttonText: {
+        // width: "30%",
+        fontWeight: 700,
+        fontSize: 17,
+        textAlign: "center"
+    },
 });

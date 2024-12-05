@@ -150,12 +150,12 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
                 <>
                     <Pressable>
                         <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
-                            <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Edit Strategy</Text>
+                            <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Edit Strategy</Text>
                         </View>
                     </Pressable>
                     <Pressable>
                         <View style={[styles.submitButton, { backgroundColor: colorTheme.red, }]}>
-                            <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Delete Strategy</Text>
+                            <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Delete Strategy</Text>
                         </View>
                     </Pressable>
                 </>
@@ -194,6 +194,12 @@ const styles = StyleSheet.create({
         fontSize: 17,
         textAlign: "center"
     },
+    buttonText: {
+        // width: "30%",
+        fontWeight: 700,
+        fontSize: 17,
+        textAlign: "center"
+    },
     infoText: {
         width: "70%",
         fontWeight: 400,
@@ -205,7 +211,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 50,
         minWidth: 250,
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "center"
     },
     submitButton: {
         padding: 13,
@@ -213,6 +220,7 @@ const styles = StyleSheet.create({
         marginBottom: 40,
         borderRadius: 50,
         minWidth: 250,
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "center"
     }
 });
