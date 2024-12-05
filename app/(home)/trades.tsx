@@ -8,18 +8,23 @@ import { formatDollarAmount } from "../../utils/format";
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
 import Stat from "../../components/Stat";
+import NoData from "../../components/NoData";
+import { subscribeToTrades } from "../../utils/firebase/trades";
 
 export default function Trades() {
   const router = useRouter();
   const { theme } = useTheme();
+  const [items, setItems] = useState<Trade[]>([]);
   const colorTheme = theme === "light" ? light : dark
   const [groupedTrades, setGroupedTrades] = useState<Record<string, Trade[]>>({});
+  const trades = items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) || [];
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function groupTrades() {
       const tempHash: Record<string, Trade[]> = {};
 
-      TRADES.transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).forEach((item: Trade) => {
+      trades.forEach((item: Trade) => {
         const formatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
         const month = formatter.format(new Date(item.date));
 
@@ -34,7 +39,26 @@ export default function Trades() {
     }
 
     groupTrades();
+  }, [trades]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTrades(setItems);
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (trades.length > 0) {
+      setLoading(false);
+    }
+  }, [trades]);
+
+  if (loading) return <Text></Text>;
+  if (trades.length === 0) return (
+    <NoData
+      header="No Trades Available"
+      text="To see your trades, please add some trades. Once your information is submitted, the trades will be displayed here."
+    />
+  )
 
   return (
     <ScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground, }]}>
@@ -67,9 +91,9 @@ export default function Trades() {
                   <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? colorTheme.red : colorTheme.green} />
                   <Text style={{ color: trade.profit! < 0 ? colorTheme.red : colorTheme.green }}>{formatDollarAmount(trade.profit)}</Text>
                 </View> */}
-                <Stat 
-                  value={formatDollarAmount(trade.profit)} 
-                  color={trade.profit! < 0 ? colorTheme.red : colorTheme.green}                
+                <Stat
+                  value={formatDollarAmount(trade.profit)}
+                  color={trade.profit! < 0 ? colorTheme.red : colorTheme.green}
                 />
               </View>
             </Pressable>

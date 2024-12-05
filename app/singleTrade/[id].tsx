@@ -1,18 +1,23 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
 import TRADES from "../../data/trades.json";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from "expo-router";
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
+import NoData from "../../components/NoData";
+import { Trade } from "../../types/Trade";
+import { subscribeToTrades } from "../../utils/firebase/trades";
 
 export default function SingleTrade() {
     const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
     const route = useRoute<any>();
     const { id } = route.params;
-    const trade = TRADES.transactions.find(item => item.transactionId.toString() === id);
+    const [items, setItems] = useState<Trade[]>([]);
+    const trades = items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) || [];
+    const trade = trades.find(item => item.transactionId.toString() === id);
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -27,44 +32,56 @@ export default function SingleTrade() {
         });
     }, [navigation]);
 
+    useEffect(() => {
+        const unsubscribe = subscribeToTrades(setItems);
+        return () => unsubscribe();
+    }, []);
+
+    if (!trade) return (
+        <NoData
+            header="Trade Not Found"
+            text="It seems the trade you’re looking for doesn’t exist."
+        />
+    )
+
     return (
-        <ScrollView style={[styles.page, {backgroundColor: colorTheme.bodyBackground,}]}>
-            <View style={[styles.container, {backgroundColor: colorTheme.sectionBackground,}]}>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Date</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{new Date(trade!.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
+        <ScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground, }]}>
+            <View style={[styles.container, { backgroundColor: colorTheme.sectionBackground, }]}>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Date</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{new Date(trade!.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Strategy</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade!.strategyUsed}</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Strategy</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade!.strategyUsed}</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Pair</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade!.currencyPair}</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Pair</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade!.currencyPair}</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Type</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade!.type.toUpperCase()}</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Type</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade!.type.toUpperCase()}</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Session</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade?.tradingSession} Session</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Session</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade?.tradingSession} Session</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Risk</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade?.amountRisked}</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Risk</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade?.amountRisked}</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Lots</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade?.lots}</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Lots</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade?.lots}</Text>
                 </View>
-                <View style={[styles.row, {borderBottomColor: `${colorTheme.bodyBackground}60`,}]}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Profit</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade?.profit}</Text>
+                <View style={[styles.row, { borderBottomColor: `${colorTheme.bodyBackground}60`, }]}>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Profit</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade?.profit}</Text>
                 </View>
                 <View style={styles.lastRow}>
-                    <Text style={[styles.headerText, {color: colorTheme.headerText,}]}>Notes</Text>
-                    <Text style={[styles.infoText, {color: colorTheme.headerText,}]}>{trade?.notes}</Text>
+                    <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Notes</Text>
+                    <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{trade?.notes}</Text>
                 </View>
             </View>
         </ScrollView>

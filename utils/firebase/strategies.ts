@@ -3,7 +3,7 @@ import { db } from "../../firebaseConfig";
 
 const collectionName = "strategies";
 
-export const createItem = async (data: any) => {
+export const createStrategy = async (data: any) => {
   try {
     const docRef = await addDoc(collection(db, collectionName), data);
     return docRef.id;
@@ -12,7 +12,7 @@ export const createItem = async (data: any) => {
   }
 };
 
-export const subscribeToItems = (callback: (items: any[]) => void) => {
+export const subscribeToStrategies = (callback: (items: any[]) => void) => {
   const collectionRef = collection(db, collectionName);
   return onSnapshot(collectionRef, (querySnapshot) => {
     const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -20,7 +20,7 @@ export const subscribeToItems = (callback: (items: any[]) => void) => {
   });
 };
 
-export const updateItem = async (id: string, data: any) => {
+export const updateStrategy = async (id: string, data: any) => {
   try {
     const docRef = doc(db, collectionName, id);
     await updateDoc(docRef, data);
@@ -29,7 +29,7 @@ export const updateItem = async (id: string, data: any) => {
   }
 };
 
-export const deleteItem = async (id: string) => {
+export const deleteStrategy = async (id: string) => {
   try {
     const docRef = doc(db, collectionName, id);
     await deleteDoc(docRef);

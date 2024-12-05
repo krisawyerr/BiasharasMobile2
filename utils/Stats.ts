@@ -20,42 +20,43 @@ export function formatTrades(trade: Trade[]) {
     let strategiesData: Record<string, StatData> = {};
 
     trade.forEach((item) => {
+        const pnl = parseFloat(item.profit.toString())
         if (position.index === 0) {
-            highAndLow.high = item.profit;
-            highAndLow.low = item.profit;
+            highAndLow.high = pnl;
+            highAndLow.low = pnl;
         }
 
-        position.total += item.profit;
+        position.total += pnl;
         position.index++;
         data.push({ x: position.index, y: position.total });
 
         highAndLow.high = Math.max(highAndLow.high, position.total);
         highAndLow.low = Math.min(highAndLow.low, position.total);
 
-        if (item.profit >= 0) {
+        if (pnl >= 0) {
             winsAndLosses.win++;
         } else {
             winsAndLosses.lose++;
         }
 
         const session = sessionsData[item.tradingSession] || { wins: 0, losses: 0, pnl: 0 };
-        session.pnl += item.profit;
-        if (item.profit >= 0) session.wins++;
+        session.pnl += pnl;
+        if (pnl >= 0) session.wins++;
         else session.losses++;
 
         sessionsData[item.tradingSession] = session;
 
         const pair = pairsData[item.currencyPair] || { wins: 0, losses: 0, pnl: 0 };
-        pair.pnl += item.profit;
-        if (item.profit >= 0) pair.wins++;
+        pair.pnl += pnl;
+        if (pnl >= 0) pair.wins++;
         else pair.losses++;
 
         pairsData[item.currencyPair] = pair;
 
         if (item.strategyUsed !== "none") {
             const strategy = strategiesData[item.strategyUsed] || { wins: 0, losses: 0, pnl: 0 };
-            strategy.pnl += item.profit;
-            if (item.profit >= 0) strategy.wins++;
+            strategy.pnl += pnl;
+            if (pnl >= 0) strategy.wins++;
             else strategy.losses++;
 
             strategiesData[item.strategyUsed] = strategy;

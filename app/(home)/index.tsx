@@ -10,9 +10,9 @@ import { formatDollarAmount } from "../../utils/format";
 import { formatTrades } from "../../utils/stats";
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
-import { subscribeToItems } from "../../utils/firebase/trades";
+import { subscribeToTrades } from "../../utils/firebase/trades";
 import { Trade } from "../../types/Trade";
-import NoTrades from "../../components/NoTrades";
+import NoData from "../../components/NoData";
 
 export default function Home() {
   const [items, setItems] = useState<Trade[]>([]);
@@ -43,7 +43,7 @@ export default function Home() {
   }, [trades]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToItems(setItems);
+    const unsubscribe = subscribeToTrades(setItems);
     return () => unsubscribe();
   }, []);
 
@@ -54,7 +54,12 @@ export default function Home() {
   }, [items]);
 
   if (loading) return <Text></Text>;
-  if (trades.length === 0) return <NoTrades />;
+  if (trades.length === 0) return (
+    <NoData
+      header="No Trades Available"
+      text="To see your stats, please add some trades. Once your information is submitted, the stats will be displayed here."
+    />
+  )
 
   return (
     <ScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground }]}>

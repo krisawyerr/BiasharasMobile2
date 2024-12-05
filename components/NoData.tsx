@@ -3,17 +3,21 @@ import { StyleSheet, Text, View } from "react-native";
 import { dark, light } from "../data/colors";
 import { useTheme } from "../context/ThemeContext";
 
+interface NoDataProps {
+    header: string
+    text: string
+}
 
-export default function NoTrades() {
+export default function NoData({header, text}: NoDataProps) {
     const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
 
     return (
         <View style={[styles.page, { backgroundColor: colorTheme.bodyBackground }]}>
             <View style={[styles.section, { backgroundColor: colorTheme.sectionBackground, }]}>
-                <Text style={[styles.header, { color: colorTheme.headerText, borderBottomColor: `${colorTheme.headerText}15`, }]}>No Trades Available</Text>
+                <Text style={[styles.header, { color: colorTheme.headerText, borderBottomColor: `${colorTheme.headerText}15`, }]}>{header}</Text>
                 <View style={styles.pieGraph}>
-                    <Text style={{ color: colorTheme.headerText, textAlign: 'center' }}>To see your stats, please add some trades. Once your information is submitted, the stats will be displayed here.</Text>
+                    <Text style={{ color: colorTheme.headerText, textAlign: 'center' }}>{text}</Text>
                 </View>
             </View>
         </View>

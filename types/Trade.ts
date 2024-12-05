@@ -3,7 +3,7 @@ export interface Trade {
     currencyPair: string,
     amountRisked: number,
     date: string,
-    profit: number,
+    profit: number | string,
     transactionId: number,
     type: string,
     lots: number,

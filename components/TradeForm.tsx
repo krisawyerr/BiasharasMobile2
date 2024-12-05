@@ -9,6 +9,9 @@ import { dark, light } from '../data/colors'
 import { useTheme } from '../context/ThemeContext'
 import { useNavigation } from 'expo-router'
 import STRATEGIES from "../data/strategies.json"
+import { subscribeToStrategies } from '../utils/firebase/strategies'
+import { Strategy } from '../types/Strategy'
+import { createTrade, deleteTrade, updateTrade } from '../utils/firebase/trades'
 
 interface TradeFormProps {
     formType: string;
@@ -40,7 +43,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
     const [lots, setLots] = useState<string>();
     const [profits, setProfits] = useState<string>();
     const [notes, setNotes] = useState<string>();
-
+    const [items, setItems] = useState<Strategy[]>([]);
     const pairRef = useRef<PickerRef>(null);
     const strategyRef = useRef<PickerRef>(null);
     const typeRef = useRef<PickerRef>(null);
@@ -49,18 +52,31 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
     const lotsRef = useRef<TextInput>(null);
     const profitsRef = useRef<TextInput>(null);
     const notesRef = useRef<TextInput>(null);
+    const [formHandling, setFormHandling] = useState({
+        strat: true,
+        pair: true,
+        type: true,
+        session: true,
+        risk: true,
+        lots: true,
+        profits: true,
+    })
 
     useEffect(() => {
-        if (formType === "edit") {
+        const unsubscribe = subscribeToStrategies(setItems);
+        return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
             let list: StrategyList[] = []
 
-            STRATEGIES.strategies.forEach(item => {
+            list.push({ label: "None", value: 'none' })
+            items.forEach(item => {
                 list.push({ label: item.name, value: item.name })
             })
 
             setStrategiesList(list)
-        }
-    }, [STRATEGIES]);
+    }, [items]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -92,14 +108,93 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
 
     }, [trade])
 
-    const onCancelSingle = () => {
+    function validateForm() {
+        setFormHandling({
+            strat: selectedStrategy !== undefined,
+            pair: selectedPair !== undefined,
+            type: selectedType !== undefined,
+            session: selectedSession !== undefined,
+            risk: risk !== undefined,
+            lots: lots !== undefined,
+            profits: profits !== undefined,
+        })
+
+        return Boolean(selectedStrategy !== undefined && selectedPair !== undefined && selectedType !== undefined && selectedSession !== undefined && risk !== undefined && lots !== undefined && profits !== undefined)
+    }
+
+    function onCancelSingle() {
         setShowDatePickerSingle(false)
     }
 
-    const onConfirmSingle = (output: any) => {
+    function onConfirmSingle(output: any) {
         setShowDatePickerSingle(false)
         setDate(output.date)
     }
+
+    async function addTrade() {
+        const validation = validateForm()
+
+        if (!validation) {
+            console.log("form not complete")
+            return
+        }
+
+        await createTrade({
+            currencyPair: selectedPair,
+            amountRisked: risk,
+            date: `${new Date(date)}`,
+            profit: profits,
+            transactionId: `${new Date().getTime()}`,
+            type: selectedType,
+            lots: lots,
+            tradingSession: selectedSession,
+            strategyUsed: selectedStrategy,
+            notes: notes || "",
+        });
+        console.log("10")
+
+        navigation.goBack()
+    };
+
+    async function editTrade(tradeId: string) {
+        await updateTrade(tradeId, {
+            currencyPair: selectedPair,
+            amountRisked: risk,
+            date: `${new Date(date)}`,
+            profit: profits,
+            transactionId: trade!.transactionId,
+            type: selectedType,
+            lots: lots,
+            tradingSession: selectedSession,
+            strategyUsed: selectedStrategy,
+            notes: notes,
+        });
+
+        navigation.goBack()
+    };
+
+    // {
+    //     id: string,
+    //     currencyPair: string,
+    //     amountRisked: number,
+    //     date: string,
+    //     profit: number,
+    //     transactionId: number,
+    //     type: string,
+    //     lots: number,
+    //     tradingSession: string,
+    //     notes?: string,
+    //     strategyUsed: string
+    // }
+
+    async function handleDeleteTrade(tradeId: string) {
+        await deleteTrade(tradeId)
+
+        navigation.pop();
+        navigation.navigate('(home)', { screen: 'trades' });
+    };
+
+    console.log(formHandling.formValidated)
 
     return (
         <>
@@ -114,7 +209,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => strategyRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Strategy</Text>
+                        <Text style={[styles.headerText, { color: formHandling.strat ? colorTheme.headerText : colorTheme.red }]}>Strategy</Text>
                         <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedStrategy}</Text>
                         <Picker
                             style={{ display: "none" }}
@@ -131,7 +226,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => pairRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Pair</Text>
+                        <Text style={[styles.headerText, { color: formHandling.pair ? colorTheme.headerText : colorTheme.red }]}>Pair</Text>
                         <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedPair}</Text>
                         <Picker
                             style={{ display: "none" }}
@@ -148,7 +243,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => typeRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Type</Text>
+                        <Text style={[styles.headerText, { color: formHandling.type ? colorTheme.headerText : colorTheme.red }]}>Type</Text>
                         <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedType}</Text>
                         <Picker
                             style={{ display: "none" }}
@@ -160,7 +255,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => sessionRef.current?.openExpandable?.()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Session</Text>
+                        <Text style={[styles.headerText, { color: formHandling.session ? colorTheme.headerText : colorTheme.red }]}>Session</Text>
                         <Text style={[styles.infoText, { color: colorTheme.headerText, }]}>{selectedSession}</Text>
                         <Picker
                             style={{ display: "none" }}
@@ -172,27 +267,27 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                         />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => riskRef.current?.focus()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Risk</Text>
+                        <Text style={[styles.headerText, { color: formHandling.risk ? colorTheme.headerText : colorTheme.red }]}>Risk</Text>
                         <TextInput
                             style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={riskRef}
                             value={risk}
-                            onChangeText={(e) => setRisk(e)}
+                            onChangeText={(e) => setRisk(e.replace(/[^-.\d]/g, '').replace(/(?!^)-/g, '').replace(/^(-?\d*\.?\d*).*$/, '$1'))}
                             keyboardType="numeric"
                         />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => lotsRef.current?.focus()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Lots</Text>
+                        <Text style={[styles.headerText, { color: formHandling.lots ? colorTheme.headerText : colorTheme.red }]}>Lots</Text>
                         <TextInput
                             style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={lotsRef}
                             value={lots}
-                            onChangeText={(e) => setLots(e)}
+                            onChangeText={(e) => setLots(e.replace(/[^-.\d]/g, '').replace(/(?!^)-/g, '').replace(/^(-?\d*\.?\d*).*$/, '$1'))}
                             keyboardType="numeric"
                         />
                     </Pressable>
                     <Pressable style={[styles.row, { borderBottomColor: `${colorTheme.headerBackground}60`, }]} onPress={() => profitsRef.current?.focus()}>
-                        <Text style={[styles.headerText, { color: colorTheme.headerText, }]}>Profit</Text>
+                        <Text style={[styles.headerText, { color: formHandling.profits ? colorTheme.headerText : colorTheme.red }]}>Profit</Text>
                         <TextInput
                             style={[styles.infoText, { color: colorTheme.headerText, }]}
                             ref={profitsRef}
@@ -212,19 +307,19 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
                     </Pressable>
                 </View>
                 {formType === "add" ? (
-                    <Pressable>
+                    <Pressable onPress={() => addTrade()}>
                         <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
                             <Text style={[styles.submitText, { color: colorTheme.headerBackground, }]}>Add Trade</Text>
                         </View>
                     </Pressable>
                 ) : (
                     <>
-                        <Pressable>
+                        <Pressable onPress={() => editTrade(trade!.id)}>
                             <View style={[styles.editButton, { backgroundColor: colorTheme.headerText, }]}>
                                 <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Edit Trade</Text>
                             </View>
                         </Pressable>
-                        <Pressable>
+                        <Pressable onPress={() => handleDeleteTrade(trade!.id)}>
                             <View style={[styles.submitButton, { backgroundColor: colorTheme.red, }]}>
                                 <Text style={[styles.buttonText, { color: colorTheme.headerBackground, }]}>Delete Trade</Text>
                             </View>
