@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { TouchableOpacity, useColorScheme } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons"
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";

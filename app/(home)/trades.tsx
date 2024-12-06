@@ -1,8 +1,6 @@
-import { Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
-import TRADES from "../../data/trades.json";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-import { Link, useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Trade } from "../../types/Trade";
 import { formatDollarAmount } from "../../utils/format";
 import { dark, light } from "../../data/colors";
@@ -87,10 +85,6 @@ export default function Trades() {
                 <Text style={[styles.date, { color: colorTheme.headerText, }]}>{trade.currencyPair}</Text>
               </View>
               <View style={styles.pnlGridCell}>
-                {/* <View style={[styles.pnlContainer, { backgroundColor: colorTheme.tradesPnlBackground, }]}>
-                  <Ionicons name={trade.profit! < 0 ? "arrow-down" : "arrow-up"} size={18} color={trade.profit! < 0 ? colorTheme.red : colorTheme.green} />
-                  <Text style={{ color: trade.profit! < 0 ? colorTheme.red : colorTheme.green }}>{formatDollarAmount(trade.profit)}</Text>
-                </View> */}
                 <Stat
                   value={formatDollarAmount(trade.profit)}
                   color={trade.profit! < 0 ? colorTheme.red : colorTheme.green}

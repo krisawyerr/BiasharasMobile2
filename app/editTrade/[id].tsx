@@ -1,12 +1,10 @@
 
 import { useRoute } from "@react-navigation/native";
-import TRADES from '../../data/trades.json';
 import React, { useEffect, useState } from 'react'
 import TradeForm from "../../components/TradeForm";
 import { Trade } from "../../types/Trade";
 import { subscribeToTrades } from "../../utils/firebase/trades";
 import NoData from "../../components/NoData";
-import { Text } from "react-native";
 
 export default function EditTrade() {
   const route = useRoute<any>()

@@ -8,4 +8,3 @@ export function formatDollarAmount(amount: string | number): string {
 
     return `${number < 0 ? '-$' : '$'}${Math.abs(number).toFixed(2)}`;
 }
- 

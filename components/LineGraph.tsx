@@ -11,9 +11,9 @@ interface LineGraphProps {
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function LineGraph({lineData, lineColor, widthPercentage, parentContainersTotalPaddingAndMargin}: LineGraphProps) {
+export default function LineGraph({ lineData, lineColor, widthPercentage, parentContainersTotalPaddingAndMargin }: LineGraphProps) {
     const graphDimensions = {
-        width: ((screenWidth - parentContainersTotalPaddingAndMargin) / (100/widthPercentage)),
+        width: ((screenWidth - parentContainersTotalPaddingAndMargin) / (100 / widthPercentage)),
         height: 200,
     };
 

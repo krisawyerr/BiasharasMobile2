@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Text, Pressable, TextInput, useColorScheme } from 'react-native'
+import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
 import DatePicker from 'react-native-neat-date-picker'
 import { sessions, tradingPairs, types } from '../data/formData'
 import { Picker } from 'react-native-ui-lib'
@@ -8,7 +8,6 @@ import { Trade } from '../types/Trade'
 import { dark, light } from '../data/colors'
 import { useTheme } from '../context/ThemeContext'
 import { useNavigation } from 'expo-router'
-import STRATEGIES from "../data/strategies.json"
 import { subscribeToStrategies } from '../utils/firebase/strategies'
 import { Strategy } from '../types/Strategy'
 import { createTrade, deleteTrade, updateTrade } from '../utils/firebase/trades'
@@ -68,14 +67,14 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
     }, []);
 
     useEffect(() => {
-            let list: StrategyList[] = []
+        let list: StrategyList[] = []
 
-            list.push({ label: "None", value: 'none' })
-            items.forEach(item => {
-                list.push({ label: item.name, value: item.name })
-            })
+        list.push({ label: "None", value: 'none' })
+        items.forEach(item => {
+            list.push({ label: item.name, value: item.name })
+        })
 
-            setStrategiesList(list)
+        setStrategiesList(list)
     }, [items]);
 
     useEffect(() => {
@@ -171,20 +170,6 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
 
         navigation.goBack()
     };
-
-    // {
-    //     id: string,
-    //     currencyPair: string,
-    //     amountRisked: number,
-    //     date: string,
-    //     profit: number,
-    //     transactionId: number,
-    //     type: string,
-    //     lots: number,
-    //     tradingSession: string,
-    //     notes?: string,
-    //     strategyUsed: string
-    // }
 
     async function handleDeleteTrade(tradeId: string) {
         await deleteTrade(tradeId)
@@ -398,7 +383,6 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     buttonText: {
-        // width: "30%",
         fontWeight: 700,
         fontSize: 17,
         textAlign: "center"

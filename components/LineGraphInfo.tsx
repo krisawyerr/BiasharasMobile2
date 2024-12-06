@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import { dark } from "../data/colors";
 
 interface LineGraphInfoProps {
     title: string

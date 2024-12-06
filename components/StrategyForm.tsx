@@ -109,24 +109,10 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
             timeframe: selectedTimeframe
         });
 
-        if (name !== strategy?.name) await changeStrategyAfterupdate(strategyName, `${name}`)  
+        if (name !== strategy?.name) await changeStrategyAfterupdate(strategyName, `${name}`)
 
         navigation.goBack()
     };
-
-    // {
-    //     id: string,
-    //     currencyPair: string,
-    //     amountRisked: number,
-    //     date: string,
-    //     profit: number,
-    //     transactionId: number,
-    //     type: string,
-    //     lots: number,
-    //     tradingSession: string,
-    //     notes?: string,
-    //     strategyUsed: string
-    // }
 
     async function handleDeleteStrategy(strategyId: string, strategyName: string) {
         await deleteStrategy(strategyId)
@@ -265,7 +251,6 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     buttonText: {
-        // width: "30%",
         fontWeight: 700,
         fontSize: 17,
         textAlign: "center"

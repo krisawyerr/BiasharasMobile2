@@ -1,16 +1,13 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
-import TRADES from "../../data/trades.json";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from "expo-router";
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
-import STRATEGIES from "../../data/strategies.json"
 import { subscribeToStrategies } from "../../utils/firebase/strategies";
 import { Strategy } from "../../types/Strategy";
 import NoData from "../../components/NoData";
-
 
 export default function SingleStrategy() {
     const { theme } = useTheme();

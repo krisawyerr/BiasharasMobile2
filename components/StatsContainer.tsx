@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Stat from "./Stat";
 import { FormattedStatData } from "../types/FormattedStatData";
 import { formatDollarAmount } from "../utils/format";
@@ -21,8 +21,8 @@ export default function StatsContainer({ sectionName, mostTraded, leastTraded, b
   const colorTheme = theme === "light" ? light : dark
 
   return (
-    <View style={[styles.section, {backgroundColor: colorTheme.sectionBackground,}]}>
-      <Text style={[styles.header, {color: colorTheme.headerText,borderBottomColor: `${colorTheme.headerText}15`,}]}>{sectionName} Stats</Text>
+    <View style={[styles.section, { backgroundColor: colorTheme.sectionBackground, }]}>
+      <Text style={[styles.header, { color: colorTheme.headerText, borderBottomColor: `${colorTheme.headerText}15`, }]}>{sectionName} Stats</Text>
       <View style={styles.stats}>
         <View style={styles.statsRow}>
           <Stat title={"Most Traded"} value={mostTraded.pair} subValue={`${mostTraded.totalTrade} Trades`} color={colorTheme.statContainer1} />

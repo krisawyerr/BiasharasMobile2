@@ -8,7 +8,7 @@ interface NoDataProps {
     text: string
 }
 
-export default function NoData({header, text}: NoDataProps) {
+export default function NoData({ header, text }: NoDataProps) {
     const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
 

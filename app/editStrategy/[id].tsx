@@ -1,7 +1,5 @@
 
 import { useRoute } from "@react-navigation/native";
-import TRADES from '../../data/trades.json';
-import STRATEGIES from '../../data/strategies.json';
 import React, { useEffect, useState } from 'react'
 import StrategyForm from "../../components/StrategyForm";
 import { subscribeToStrategies } from "../../utils/firebase/strategies";

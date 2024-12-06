@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import LineGraph from "../../components/LineGraph";
 import { LineData } from "../../types/LineData";
 import LineGraphInfo from "../../components/LineGraphInfo";

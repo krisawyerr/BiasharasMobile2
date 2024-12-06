@@ -1,6 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
-import TRADES from "../../data/trades.json";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import Feather from '@expo/vector-icons/Feather';
 import { Link } from "expo-router";

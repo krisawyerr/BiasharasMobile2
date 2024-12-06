@@ -1,11 +1,9 @@
 
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import TRADES from "../../data/trades.json";
 import { useEffect, useState } from "react";
-import { Link, useNavigation, useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
-import STRATEGIES from "../../data/strategies.json"
 import { formatTrades } from "../../utils/stats";
 import { StrategyData } from "../../types/StrategyData";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,15 +18,13 @@ export default function Strategies() {
   const router = useRouter();
   const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark
-  // const trades = TRADES.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-  // const strategies = STRATEGIES.strategies
   const [strategyStats, setStrategyStats] = useState<StrategyData[]>([]);
   const navigation = useNavigation()
   const [strategies, setStrategies] = useState<Strategy[]>([]);
   const [allTrades, setAllTrades] = useState<Trade[]>([]);
   const trades = allTrades.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const unsubscribeStrats = subscribeToStrategies(setStrategies);
     return () => unsubscribeStrats();

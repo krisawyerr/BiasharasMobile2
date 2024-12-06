@@ -1,7 +1,6 @@
-import { Stack, Tabs } from "expo-router";
-import { StatusBar, useColorScheme } from "react-native";
-import { dark, light } from "../data/colors";
-import { ThemeProvider, useTheme } from "../context/ThemeContext";
+import { Stack } from "expo-router";
+import { StatusBar } from "react-native";
+import { ThemeProvider } from "../context/ThemeContext";
 
 export default function RootLayout() {
     return (
