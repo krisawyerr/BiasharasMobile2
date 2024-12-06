@@ -2,13 +2,13 @@ import { getFirestore, writeBatch, doc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCyC4uuCLJP4ValGtejVXVm6-BApzMursc",
-    authDomain: "biasharas-28854.firebaseapp.com",
-    projectId: "biasharas-28854",
-    storageBucket: "biasharas-28854.firebasestorage.app",
-    messagingSenderId: "370075153998",
-    appId: "1:370075153998:web:47bd7e39064eb572f1751f",
-    measurementId: "G-CN9L32CGHT"
+    apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
