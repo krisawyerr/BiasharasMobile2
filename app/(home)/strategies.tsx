@@ -13,6 +13,7 @@ import { Strategy } from "../../types/Strategy";
 import { subscribeToTrades } from "../../utils/firebase/trades";
 import { Trade } from "../../types/Trade";
 import NoData from "../../components/NoData";
+import Loading from "../../components/Loading";
 
 export default function Strategies() {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function Strategies() {
     }
   }, [strategies]);
 
-  if (loading) return <Text></Text>;
+  if (loading) return <Loading />;
   if (strategies.length === 0) return (
     <NoData
       header="No Strategies Available"

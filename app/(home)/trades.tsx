@@ -8,6 +8,7 @@ import { useTheme } from "../../context/ThemeContext";
 import Stat from "../../components/Stat";
 import NoData from "../../components/NoData";
 import { subscribeToTrades } from "../../utils/firebase/trades";
+import Loading from "../../components/Loading";
 
 export default function Trades() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function Trades() {
     }
   }, [trades]);
 
-  if (loading) return <Text></Text>;
+  if (loading) return <Loading />;
   if (trades.length === 0) return (
     <NoData
       header="No Trades Available"

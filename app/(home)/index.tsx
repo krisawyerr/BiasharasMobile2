@@ -13,6 +13,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { subscribeToTrades } from "../../utils/firebase/trades";
 import { Trade } from "../../types/Trade";
 import NoData from "../../components/NoData";
+import Loading from "../../components/Loading";
 
 export default function Home() {
   const [items, setItems] = useState<Trade[]>([]);
@@ -53,7 +54,7 @@ export default function Home() {
     }
   }, [items]);
 
-  if (loading) return <Text></Text>;
+  if (loading) return <Loading />;
   if (trades.length === 0) return (
     <NoData
       header="No Trades Available"
