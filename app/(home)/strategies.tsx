@@ -44,7 +44,7 @@ export default function Strategies() {
         </Pressable>
       ),
     });
-  }, [navigation]);
+  }, [navigation, colorTheme]);
 
   useEffect(() => {
     if (trades.length > 0) {
