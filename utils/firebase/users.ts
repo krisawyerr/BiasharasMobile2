@@ -1,37 +1,40 @@
 import { addDoc, collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
+import { User } from "../../types/User";
 
-export const addUserToFirestore = async (userId: string, userData: any) => {
+const collectionName = "users"
+
+export const createUser = async (userId: string, data: User) => {
     try {
-        const userRef = collection(db, "users");
-        const docRef = await addDoc(userRef, {
-            userId,
-            ...userData
-        });
-        console.log("Document written with ID: ", docRef.id);
+      await addDoc(collection(db, collectionName), data);
+      const userDetails = await getUser(userId)
+      return userDetails
     } catch (error) {
-        console.error("Error adding document: ", error);
+      console.error("Error adding document: ", error);
     }
-};
+  };
 
-export const getUsers = async () => {
+export const getUser = async (userId: string) => {
     try {
-        const q = query(collection(db, "users"), where("active", "==", true));
+        const q = query(collection(db, collectionName), where("uid", "==", userId));
         const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-        });
+        const userData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        return userData;
     } catch (error) {
         console.error("Error getting documents: ", error);
     }
 };
 
-export const listenToUsers = () => {
-    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-        snapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-        });
-    });
 
-    return () => unsubscribe();
-};
+// export const listenToUsers = () => {
+//     const unsubscribe = onSnapshot(collection(db, collectionName), (snapshot) => {
+//         snapshot.forEach((doc) => {
+//             console.log(doc.id, " => ", doc.data());
+//         });
+//     });
+
+//     return () => unsubscribe();
+// };

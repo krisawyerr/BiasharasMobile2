@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'; // Add this import
 import CustomInput from './CustomInput';
 import { useTheme } from '../context/ThemeContext';
 import { dark, light } from '../data/colors';
+import { createUser, getUser } from '../utils/firebase/users';
 
 export default function AuthPage() {
     const [fullName, setFullName] = useState<string>('');
@@ -22,7 +23,16 @@ export default function AuthPage() {
     const handleSignUp = async () => {
         try {
             await signUp(email, credentials);
-            setUser(auth.currentUser);
+            if (auth.currentUser) {
+                const userDetails = await createUser(auth.currentUser.uid, {
+                    uid: auth.currentUser.uid,
+                    fullName: fullName,
+                    email: email,
+                    dateCreated: new Date()
+                })
+                console.log(userDetails)
+                setUser(userDetails![0]);
+            }
             navigation.navigate('(home)');
         } catch (error) {
             console.error("Error during sign-up:", error);
@@ -32,7 +42,11 @@ export default function AuthPage() {
     const handleSignIn = async () => {
         try {
             await signIn(email, credentials);
-            setUser(auth.currentUser);
+            if (auth.currentUser) {
+                const userDetails = await getUser(auth.currentUser.uid)
+                setUser(userDetails![0]);
+            }
+
             navigation.navigate('(home)');
         } catch (error) {
             console.error("Error during sign-in:", error);
