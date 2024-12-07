@@ -27,7 +27,7 @@ export const dark = {
 
 export const light = {
     ...constants,
-    main: "yellow",
+    main: "#000000",
     headerBackground: "#e8f6eb",
     headerText: "#00879a",
     bodyBackground: "#d2f3e7",
