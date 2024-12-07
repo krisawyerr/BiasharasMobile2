@@ -5,6 +5,7 @@ import { FormattedStatData } from "../types/FormattedStatData";
 import { formatDollarAmount } from "../utils/format";
 import { dark, light } from "../data/colors";
 import { useTheme } from "../context/ThemeContext";
+import { currencyIcons } from "../data/formData";
 
 interface StatsContainerProps {
   sectionName: string
@@ -17,8 +18,9 @@ interface StatsContainerProps {
 }
 
 export default function StatsContainer({ sectionName, mostTraded, leastTraded, bestPnL, worstPnL, bestWinRate, worstWinRate }: StatsContainerProps) {
-  const { theme } = useTheme();
+  const { theme, currency } = useTheme();
   const colorTheme = theme === "light" ? light : dark
+  const currencySign = currencyIcons.find(item => item.label === currency)!.value
 
   return (
     <View style={[styles.section, { backgroundColor: colorTheme.sectionBackground, }]}>
@@ -29,8 +31,8 @@ export default function StatsContainer({ sectionName, mostTraded, leastTraded, b
           <Stat title={"Least Traded"} value={leastTraded.pair} subValue={`${leastTraded.totalTrade} Trades`} color={colorTheme.statContainer1} />
         </View>
         <View style={styles.statsRow}>
-          <Stat title={"Best PnL"} value={bestPnL.pair} subValue={formatDollarAmount(bestPnL.pnl)} color={colorTheme.statContainer2} />
-          <Stat title={"Worst PnL"} value={worstPnL.pair} subValue={formatDollarAmount(worstPnL.pnl)} color={colorTheme.statContainer3} />
+          <Stat title={"Best PnL"} value={bestPnL.pair} subValue={formatDollarAmount(bestPnL.pnl, currencySign)} color={colorTheme.statContainer2} />
+          <Stat title={"Worst PnL"} value={worstPnL.pair} subValue={formatDollarAmount(worstPnL.pnl, currencySign)} color={colorTheme.statContainer3} />
         </View>
         <View style={styles.statsRow}>
           <Stat title={"Best Win Rate"} value={bestWinRate.pair} subValue={`${bestWinRate.winRate.toFixed(0)}%`} color={colorTheme.statContainer2} />

@@ -95,7 +95,7 @@ export default function Strategies() {
                 <Stat value={stats?.totalTrade.toString() || "0"} color={colorTheme.statContainer1} />
               </View>
               <View style={styles.pnlGridCell}>
-                <Stat value={stats ? `${stats?.winRate.toFixed(0)}%` : "Undefined"} color={colorTheme.statContainer1} />
+                <Stat value={stats ? `${stats?.winRate.toFixed(0)}%` : "0"} color={colorTheme.statContainer1} />
               </View>
             </Pressable>
           )

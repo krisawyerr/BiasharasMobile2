@@ -6,12 +6,15 @@ import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/UserContext";
 import AuthPage from "../../components/AuthPage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RootLayout() {
     const navigation = useNavigation();
     const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
     const { user } = useAuth();
+
+    // AsyncStorage.clear()
 
     if (user === null) return <AuthPage />
 

@@ -15,6 +15,7 @@ import { Trade } from "../../types/Trade";
 import NoData from "../../components/NoData";
 import Loading from "../../components/Loading";
 import { useAuth } from "../../context/UserContext";
+import { currencyIcons } from "../../data/formData";
 
 export default function Home() {
   const [items, setItems] = useState<Trade[]>();
@@ -25,9 +26,10 @@ export default function Home() {
   const [pairStats, setPairStats] = useState<Stats>();
   const [strategyStats, setStrategyStats] = useState<Stats>();
   const [loading, setLoading] = useState(true);
-  const { theme } = useTheme();
+  const { theme, currency } = useTheme();
   const colorTheme = theme === "light" ? light : dark;
   const { user } = useAuth();
+  const currencySign = currencyIcons.find(item => item.label === currency)!.value
 
   useEffect(() => {
     function getStats() {
@@ -75,9 +77,9 @@ export default function Home() {
               widthPercentage={65}
             />
             <View style={styles.graphInfo}>
-              <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"])} color={colorTheme.statContainer1} />
-              <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high)} color={colorTheme.statContainer2} />
-              <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low)} color={colorTheme.statContainer3} />
+              <LineGraphInfo title={"Current"} value={formatDollarAmount(lineData[lineData.length - 1]["y"], currencySign)} color={colorTheme.statContainer1} />
+              <LineGraphInfo title={"High"} value={formatDollarAmount(highAndLow.high, currencySign)} color={colorTheme.statContainer2} />
+              <LineGraphInfo title={"Low"} value={formatDollarAmount(highAndLow.low, currencySign)} color={colorTheme.statContainer3} />
             </View>
           </View>
         </View>

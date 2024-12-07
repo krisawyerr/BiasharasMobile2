@@ -1,17 +1,22 @@
 import { useTheme } from "../../context/ThemeContext";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, ScrollView, Pressable, Text, Switch } from 'react-native';
 import FeatherIcon from '@expo/vector-icons/Feather';
 import { signOut } from "../../utils/firebase/auth";
 import { useAuth } from "../../context/UserContext";
 import { dark, light } from "../../data/colors";
+import { Picker } from "react-native-ui-lib";
+import { currencies } from "../../data/formData";
+import { PickerRef } from "../../types/PickerRef";
 
 export default function Profile() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, currency, setCurrency } = useTheme();
   const colorTheme = theme === "light" ? light : dark
   const [form, setForm] = useState({ emailNotifications: true, pushNotifications: false, });
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   const { user, setUser } = useAuth();
+  const [selectedCurrency, setSelectedCurrency] = useState<string | undefined>();
+  const currencyRef = useRef<PickerRef>(null);
 
   useEffect(() => {
     if (theme === "light") {
@@ -21,12 +26,18 @@ export default function Profile() {
     }
   }, [theme])
 
+  useEffect(() => {
+    if (selectedCurrency) {
+      setCurrency(selectedCurrency)
+    }
+  }, [selectedCurrency])
+
   function goDarkMode() {
     toggleTheme()
     setIsDarkMode(!isDarkMode)
   }
 
-    const handleSignOut = async () => {
+  const handleSignOut = async () => {
     try {
       await signOut();
       setUser(null);
@@ -36,199 +47,80 @@ export default function Profile() {
   };
 
   return (
-    <ScrollView style={{backgroundColor: colorTheme.bodyBackground}}>
+    <ScrollView style={{ backgroundColor: colorTheme.bodyBackground }}>
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, {color: colorTheme.headerText}]}>Profile</Text>
-
-        <View style={[styles.sectionBody, {backgroundColor: colorTheme.sectionBackground}]}>
-          <View style={[styles.rowWrapper, styles.rowFirst, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Profile</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <Text style={[styles.rowValue, {color: colorTheme.headerText}]}>{user.email}</Text>
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </Pressable>
-          </View>
-          <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Currency</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <Text style={[styles.rowValue, {color: colorTheme.headerText}]}>United States Dollars</Text>
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </Pressable>
-          </View>
-          <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Language</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <Text style={[styles.rowValue, {color: colorTheme.headerText}]}>English</Text>
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </Pressable>
-          </View>
-
-          {/* <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Location</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <Text style={[styles.rowValue, {color: colorTheme.headerText}]}>Los Angeles, CA</Text>
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </Pressable>
-          </View> */}
-
-          <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
+        <Text style={[styles.sectionTitle, { color: colorTheme.headerText }]}>Profile</Text>
+        <View style={[styles.sectionBody, { backgroundColor: colorTheme.sectionBackground }]}>
+          <View style={[styles.rowWrapper, styles.rowFirst, { borderColor: colorTheme.bodyBackground }]}>
             <View style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Dark Mode</Text>
-
-              <View style={styles.rowSpacer} />
-
+              <Text style={[styles.rowLabel, { color: colorTheme.main }]}>Name</Text>
+              <Text style={[styles.rowValue, { color: colorTheme.headerText }]}>{user.fullName}</Text>
+            </View>
+          </View>
+          <View style={[styles.rowWrapper, { borderColor: colorTheme.bodyBackground }]}>
+            <View style={styles.row}>
+              <Text style={[styles.rowLabel, { color: colorTheme.main }]}>Email</Text>
+              <Text style={[styles.rowValue, { color: colorTheme.headerText }]}>{user.email}</Text>
+            </View>
+          </View>
+          <View style={[styles.rowWrapper, { borderColor: colorTheme.bodyBackground }]}>
+            <Pressable onPress={() => currencyRef.current?.openExpandable?.()} style={styles.row}>
+              <Text style={[styles.rowLabel, { color: colorTheme.main }]}>Currency</Text>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={[styles.rowValue, { color: colorTheme.headerText }]}>{currency}</Text>
+                <FeatherIcon color={colorTheme.headerText} name="chevron-right" size={20} />
+              </View>
+            </Pressable>
+            <Picker
+              style={{ display: "none" }}
+              showSearch
+              topBarProps={{ title: 'Currency' }}
+              searchStyle={{
+                color: "blue",
+                placeholderTextColor: "gray",
+              }}
+              ref={currencyRef}
+              value={selectedCurrency}
+              onChange={item => setSelectedCurrency(item?.toString() || undefined)}
+              items={currencies}
+            />
+          </View>
+          <View style={[styles.rowWrapper, { borderColor: colorTheme.bodyBackground }]}>
+            <View style={styles.row}>
+              <Text style={[styles.rowLabel, { color: colorTheme.main }]}>Dark Mode</Text>
               <Switch
                 onValueChange={() => goDarkMode()}
                 style={{
                   transform: [{ scaleX: 0.95 }, { scaleY: 0.95 }],
                 }}
-                value={isDarkMode} />
+                value={isDarkMode}
+              />
             </View>
           </View>
-
-          {/* <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <View style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Push Notifications</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <Switch
-                onValueChange={pushNotifications =>
-                  setForm({ ...form, pushNotifications })
-                }
-                style={{
-                  transform: [{ scaleX: 0.95 }, { scaleY: 0.95 }],
-                }}
-                value={form.pushNotifications} />
-            </View>
-          </View> */}
         </View>
       </View>
-
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, {color: colorTheme.headerText}]}>Resources</Text>
-
-        <View style={[styles.sectionBody, {backgroundColor: colorTheme.sectionBackground}]}>
-          <View style={[styles.rowWrapper, styles.rowFirst, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Contact Us</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
+        <Text style={[styles.sectionTitle, { color: colorTheme.headerText }]}>Resources</Text>
+        <View style={[styles.sectionBody, { backgroundColor: colorTheme.sectionBackground }]}>
+          <View style={[styles.rowWrapper, styles.rowFirst, { borderColor: colorTheme.bodyBackground }]}>
+            <Pressable onPress={() => { }} style={styles.row}>
+              <Text style={[styles.rowLabel, { color: colorTheme.main }]}>Contact Us</Text>
+              <FeatherIcon color={colorTheme.headerText} name="chevron-right" size={20} />
             </Pressable>
           </View>
-
-          {/* <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Report Bug</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </Pressable>
-          </View> */}
-
-          {/* <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Rate in App Store</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
-            </Pressable>
-          </View> */}
-
-          <View style={[styles.rowWrapper, {borderColor: colorTheme.bodyBackground}]}>
-            <Pressable
-              onPress={() => {
-                // handle onPress
-              }}
-              style={styles.row}>
-              <Text style={[styles.rowLabel, {color: colorTheme.main}]}>Terms and Privacy</Text>
-
-              <View style={styles.rowSpacer} />
-
-              <FeatherIcon
-                color="#C6C6C6"
-                name="chevron-right"
-                size={20} />
+          <View style={[styles.rowWrapper, { borderColor: colorTheme.bodyBackground }]}>
+            <Pressable onPress={() => { }} style={styles.row}>
+              <Text style={[styles.rowLabel, { color: colorTheme.main }]}>Terms and Privacy</Text>
+              <FeatherIcon color={colorTheme.headerText} name="chevron-right" size={20} />
             </Pressable>
           </View>
         </View>
       </View>
-
       <View style={styles.signOutSection}>
         <Pressable onPress={handleSignOut}>
-          <Text style={{color: colorTheme.red}}>Sign Out</Text>
+          <Text style={{ color: colorTheme.red }}>Sign Out</Text>
         </Pressable>
       </View>
-
     </ScrollView>
   );
 }
@@ -280,7 +172,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: "space-between",
     height: 44,
     paddingRight: 24,
   },
@@ -305,3 +197,20 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
+
+// import React from 'react';
+// import { Text, View, Button } from 'react-native';
+// import { useTheme } from '../../context/ThemeContext';
+
+// export default function Profile() {
+//   const { theme, toggleTheme, currency, setCurrency } = useTheme();
+
+//   return (
+//     <View>
+//       <Text>Current Theme: {theme}</Text>
+//       <Text>Current Currency: {currency}</Text>
+//       <Button title="Toggle Theme" onPress={toggleTheme} />
+//       <Button title="Set Currency to EUR" onPress={() => setCurrency('EUR')} />
+//     </View>
+//   );
+// };

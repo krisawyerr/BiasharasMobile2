@@ -142,6 +142,42 @@ export const types = [
     { label: 'Sell', value: 'Sell' },
 ];
 
+export const currencies = [
+    { label: 'United States Dollar', value: 'United States Dollar' },
+    { label: 'European Euro', value: 'European Euro' },
+    { label: 'British Pound', value: 'British Pound' },
+    { label: 'Japanese Yen', value: 'Japanese Yen' },
+    { label: 'Canadian Dollar', value: 'Canadian Dollar' },
+    { label: 'Australian Dollar', value: 'Australian Dollar' },
+    { label: 'New Zealand Dollar', value: 'New Zealand Dollar' },
+    { label: 'Hong Kong Dollar', value: 'Hong Kong Dollar' },
+    { label: 'Singapore Dollar', value: 'Singapore Dollar' },
+    { label: 'Mexican Peso', value: 'Mexican Peso' },
+    { label: 'Chinese Yuan Renminbi', value: 'Chinese Yuan Renminbi' },
+    { label: 'Indian Rupee', value: 'Indian Rupee' },
+    { label: 'Brazilian Real', value: 'Brazilian Real' },
+    { label: 'Russian Ruble', value: 'Russian Ruble' },
+    { label: 'Korean Won', value: 'Korean Won' },
+];
+
+export const currencyIcons = [
+    { label: 'United States Dollar', value: '$' },
+    { label: 'European Euro', value: '€' },
+    { label: 'British Pound', value: '£' },
+    { label: 'Japanese Yen', value: '¥' },
+    { label: 'Canadian Dollar', value: 'C$' },
+    { label: 'Australian Dollar', value: 'A$' },
+    { label: 'New Zealand Dollar', value: 'NZ$' },
+    { label: 'Hong Kong Dollar', value: 'HK$' },
+    { label: 'Singapore Dollar', value: 'S$' },
+    { label: 'Mexican Peso', value: 'MX$' },
+    { label: 'Chinese Yuan Renminbi', value: '¥' },
+    { label: 'Indian Rupee', value: '₹' },
+    { label: 'Brazilian Real', value: 'R$' },
+    { label: 'Russian Ruble', value: '₽' },
+    { label: 'Korean Won', value: '₩' },
+];
+
 export const sessions = [
     { label: 'London', value: 'London' },
     { label: 'New York', value: 'New York' },

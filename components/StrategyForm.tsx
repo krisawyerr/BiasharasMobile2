@@ -10,14 +10,11 @@ import { Strategy } from '../types/Strategy'
 import { createStrategy, deleteStrategy, updateStrategy } from '../utils/firebase/strategies'
 import { changeStrategyAfterupdate, removeStrategyAfterDeletion } from '../utils/firebase/trades'
 import { useAuth } from '../context/UserContext'
+import { PickerRef } from '../types/PickerRef'
 
 interface TradeFormProps {
     formType: string;
     strategy?: Strategy;
-}
-
-interface PickerRef {
-    openExpandable?: () => void;
 }
 
 export default function StrategyForm({ formType, strategy }: TradeFormProps) {

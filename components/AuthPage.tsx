@@ -30,7 +30,6 @@ export default function AuthPage() {
                     email: email,
                     dateCreated: new Date()
                 })
-                console.log(userDetails)
                 setUser(userDetails![0]);
             }
             navigation.navigate('(home)');

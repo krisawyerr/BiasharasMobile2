@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     singleGraphInfo: {
         borderWidth: 1,
         borderRadius: 10,
-        padding: 20,
+        padding: 15,
         marginBottom: 5,
         flex: 1,
         justifyContent: "center"

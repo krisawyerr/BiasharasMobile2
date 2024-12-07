@@ -10,16 +10,18 @@ import NoData from "../../components/NoData";
 import { subscribeToTrades } from "../../utils/firebase/trades";
 import Loading from "../../components/Loading";
 import { useAuth } from "../../context/UserContext";
+import { currencyIcons } from "../../data/formData";
 
 export default function Trades() {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme, currency } = useTheme();
   const [items, setItems] = useState<Trade[]>();
   const colorTheme = theme === "light" ? light : dark
   const [groupedTrades, setGroupedTrades] = useState<Record<string, Trade[]>>({});
   const trades = items ? items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : undefined;
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const currencySign = currencyIcons.find(item => item.label === currency)!.value
 
   useEffect(() => {
     function groupTrades() {
@@ -87,7 +89,7 @@ export default function Trades() {
               </View>
               <View style={styles.pnlGridCell}>
                 <Stat
-                  value={formatDollarAmount(trade.profit)}
+                  value={formatDollarAmount(trade.profit, currencySign)}
                   color={trade.profit! < 0 ? colorTheme.red : colorTheme.green}
                 />
               </View>
