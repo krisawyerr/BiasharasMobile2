@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "myApp",
-    "scheme": "myApp",
-    "slug": "myApp",
+    "name": "BiasharasMobile",
+    "scheme": "BiasharasMobile",
+    "slug": "BiasharasMobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
