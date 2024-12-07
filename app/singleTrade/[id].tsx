@@ -8,6 +8,7 @@ import { useTheme } from "../../context/ThemeContext";
 import NoData from "../../components/NoData";
 import { Trade } from "../../types/Trade";
 import { subscribeToTrades } from "../../utils/firebase/trades";
+import { useAuth } from "../../context/UserContext";
 
 export default function SingleTrade() {
     const { theme } = useTheme();
@@ -18,6 +19,7 @@ export default function SingleTrade() {
     const trades = items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) || [];
     const trade = trades.find(item => item.transactionId.toString() === id);
     const navigation = useNavigation()
+  const { user } = useAuth();
 
     useEffect(() => {
         navigation.setOptions({
@@ -32,7 +34,7 @@ export default function SingleTrade() {
     }, [navigation]);
 
     useEffect(() => {
-        const unsubscribe = subscribeToTrades(setItems);
+    const unsubscribe = subscribeToTrades(user.uid, setItems);
         return () => unsubscribe();
     }, []);
 

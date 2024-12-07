@@ -9,6 +9,7 @@ import { useNavigation } from 'expo-router'
 import { Strategy } from '../types/Strategy'
 import { createStrategy, deleteStrategy, updateStrategy } from '../utils/firebase/strategies'
 import { changeStrategyAfterupdate, removeStrategyAfterDeletion } from '../utils/firebase/trades'
+import { useAuth } from '../context/UserContext'
 
 interface TradeFormProps {
     formType: string;
@@ -40,6 +41,7 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
         timeframe: true,
         details: true,
     })
+    const { user } = useAuth()
 
     useEffect(() => {
         navigation.setOptions({
@@ -93,7 +95,8 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
             strategyId: `${new Date().getTime()}`,
             name: name,
             style: selectedStyles,
-            timeframe: selectedTimeframe
+            timeframe: selectedTimeframe,
+            user: user.uid
         });
 
         navigation.goBack()
@@ -106,17 +109,18 @@ export default function StrategyForm({ formType, strategy }: TradeFormProps) {
             strategyId: strategy!.strategyId,
             name: name,
             style: selectedStyles,
-            timeframe: selectedTimeframe
+            timeframe: selectedTimeframe,
+            user: user.uid
         });
 
-        if (name !== strategy?.name) await changeStrategyAfterupdate(strategyName, `${name}`)
+        if (name !== strategy?.name) await changeStrategyAfterupdate(user.uid, strategyName, `${name}`)
 
         navigation.goBack()
     };
 
     async function handleDeleteStrategy(strategyId: string, strategyName: string) {
         await deleteStrategy(strategyId)
-        await removeStrategyAfterDeletion(strategyName)
+        await removeStrategyAfterDeletion(user.uid, strategyName)
 
         navigation.pop();
         navigation.navigate('(home)', { screen: 'strategies' });

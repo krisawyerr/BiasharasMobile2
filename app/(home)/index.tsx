@@ -14,9 +14,10 @@ import { subscribeToTrades } from "../../utils/firebase/trades";
 import { Trade } from "../../types/Trade";
 import NoData from "../../components/NoData";
 import Loading from "../../components/Loading";
+import { useAuth } from "../../context/UserContext";
 
 export default function Home() {
-  const [items, setItems] = useState<Trade[]>([]);
+  const [items, setItems] = useState<Trade[]>();
   const [lineData, setLineData] = useState<LineData[]>([{ x: 0, y: 0 }]);
   const [highAndLow, setHighAndLow] = useState({ high: 0, low: 0 });
   const [winsAndLosses, setWinsAndLosses] = useState({ win: 0, lose: 0 });
@@ -24,14 +25,14 @@ export default function Home() {
   const [pairStats, setPairStats] = useState<Stats>();
   const [strategyStats, setStrategyStats] = useState<Stats>();
   const [loading, setLoading] = useState(true);
-  const trades = items.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) || [];
   const { theme } = useTheme();
   const colorTheme = theme === "light" ? light : dark;
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (trades.length > 0) {
-      function getStats() {
-        const formattedData = formatTrades(trades);
+    function getStats() {
+      if (items && items.length > 0) {
+        const formattedData = formatTrades(items);
         setLineData(formattedData.data);
         setHighAndLow(formattedData.highAndLow);
         setWinsAndLosses(formattedData.winsAndLosses);
@@ -39,23 +40,20 @@ export default function Home() {
         setPairStats(formattedData.pairStats);
         setStrategyStats(formattedData.strategiesStats);
       }
-      getStats();
+
+      setLoading(false);
     }
-  }, [trades]);
+
+    getStats();
+  }, [items]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToTrades(setItems);
+    const unsubscribe = subscribeToTrades(user.uid, setItems);
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (items.length > 0) {
-      setLoading(false);
-    }
-  }, [items]);
-
-  if (loading) return <Loading />;
-  if (trades.length === 0) return (
+  if (!items || loading) return <Loading />;
+  if (items.length === 0) return (
     <NoData
       header="No Trades Available"
       text="To see your stats, please add some trades. Once your information is submitted, the stats will be displayed here."

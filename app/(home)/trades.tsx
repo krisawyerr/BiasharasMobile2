@@ -9,49 +9,49 @@ import Stat from "../../components/Stat";
 import NoData from "../../components/NoData";
 import { subscribeToTrades } from "../../utils/firebase/trades";
 import Loading from "../../components/Loading";
+import { useAuth } from "../../context/UserContext";
 
 export default function Trades() {
   const router = useRouter();
   const { theme } = useTheme();
-  const [items, setItems] = useState<Trade[]>([]);
+  const [items, setItems] = useState<Trade[]>();
   const colorTheme = theme === "light" ? light : dark
   const [groupedTrades, setGroupedTrades] = useState<Record<string, Trade[]>>({});
-  const trades = items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) || [];
+  const trades = items ? items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : undefined;
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function groupTrades() {
-      const tempHash: Record<string, Trade[]> = {};
+      if (trades) {
+        const tempHash: Record<string, Trade[]> = {};
 
-      trades.forEach((item: Trade) => {
-        const formatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
-        const month = formatter.format(new Date(item.date));
+        trades.forEach((item: Trade) => {
+          const formatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
+          const month = formatter.format(new Date(item.date));
 
-        if (tempHash[month]) {
-          tempHash[month].push(item);
-        } else {
-          tempHash[month] = [item];
-        }
-      });
+          if (tempHash[month]) {
+            tempHash[month].push(item);
+          } else {
+            tempHash[month] = [item];
+          }
+        });
 
-      setGroupedTrades(tempHash);
+        setGroupedTrades(tempHash);
+      }
+
+      setLoading(false);
     }
 
     groupTrades();
   }, [trades]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToTrades(setItems);
+    const unsubscribe = subscribeToTrades(user.uid, setItems);
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (trades.length > 0) {
-      setLoading(false);
-    }
-  }, [trades]);
-
-  if (loading) return <Loading />;
+  if (!trades || loading) return <Loading />;
   if (trades.length === 0) return (
     <NoData
       header="No Trades Available"

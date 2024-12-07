@@ -8,6 +8,7 @@ import { useTheme } from "../../context/ThemeContext";
 import { subscribeToStrategies } from "../../utils/firebase/strategies";
 import { Strategy } from "../../types/Strategy";
 import NoData from "../../components/NoData";
+import { useAuth } from "../../context/UserContext";
 
 export default function SingleStrategy() {
     const { theme } = useTheme();
@@ -17,6 +18,7 @@ export default function SingleStrategy() {
     const [strategies, setStrategies] = useState<Strategy[]>([]);
     const strategy = strategies.find(item => item.id.toString() === id)
     const navigation = useNavigation()
+    const { user } = useAuth();
 
     useEffect(() => {
         navigation.setOptions({
@@ -31,7 +33,7 @@ export default function SingleStrategy() {
     }, [navigation]);
 
     useEffect(() => {
-        const unsubscribeStrats = subscribeToStrategies(setStrategies);
+        const unsubscribeStrats = subscribeToStrategies(user.uid, setStrategies);
         return () => unsubscribeStrats();
     }, []);
 

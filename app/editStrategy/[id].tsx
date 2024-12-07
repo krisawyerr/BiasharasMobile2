@@ -5,15 +5,17 @@ import StrategyForm from "../../components/StrategyForm";
 import { subscribeToStrategies } from "../../utils/firebase/strategies";
 import { Strategy } from "../../types/Strategy";
 import NoData from "../../components/NoData";
+import { useAuth } from "../../context/UserContext";
 
 export default function EditTrade() {
   const route = useRoute<any>()
   const { id } = route.params
   const [strategies, setStrategies] = useState<Strategy[]>([]);
   const strategy = strategies.find(item => item.id === id)
+  const { user } = useAuth();
 
   useEffect(() => {
-    const unsubscribeStrats = subscribeToStrategies(setStrategies);
+    const unsubscribeStrats = subscribeToStrategies(user.uid, setStrategies);
     return () => unsubscribeStrats();
   }, []);
 

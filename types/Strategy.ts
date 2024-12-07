@@ -6,4 +6,5 @@ export interface Strategy {
     name: string,
     style: string,
     timeframe: string
+    user: string
 }

@@ -11,6 +11,7 @@ import { useNavigation } from 'expo-router'
 import { subscribeToStrategies } from '../utils/firebase/strategies'
 import { Strategy } from '../types/Strategy'
 import { createTrade, deleteTrade, updateTrade } from '../utils/firebase/trades'
+import { useAuth } from '../context/UserContext'
 
 interface TradeFormProps {
     formType: string;
@@ -60,9 +61,10 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
         lots: true,
         profits: true,
     })
+    const { user } = useAuth();
 
     useEffect(() => {
-        const unsubscribe = subscribeToStrategies(setItems);
+        const unsubscribe = subscribeToStrategies(user.uid, setItems);
         return () => unsubscribe();
     }, []);
 
@@ -149,6 +151,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
             tradingSession: selectedSession,
             strategyUsed: selectedStrategy,
             notes: notes || "",
+            user: user.uid
         });
 
         navigation.goBack()
@@ -166,6 +169,7 @@ export default function TradeForm({ formType, trade }: TradeFormProps) {
             tradingSession: selectedSession,
             strategyUsed: selectedStrategy,
             notes: notes,
+            user: user.uid
         });
 
         navigation.goBack()

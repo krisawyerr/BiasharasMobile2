@@ -19,7 +19,7 @@ export function formatTrades(trade: Trade[]) {
     let pairsData: Record<string, StatData> = {};
     let strategiesData: Record<string, StatData> = {};
 
-    trade.forEach((item) => {
+    trade.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).forEach((item) => {
         const pnl = parseFloat(item.profit.toString())
         if (position.index === 0) {
             highAndLow.high = pnl;

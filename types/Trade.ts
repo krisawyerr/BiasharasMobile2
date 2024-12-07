@@ -10,4 +10,5 @@ export interface Trade {
     tradingSession: string,
     notes?: string,
     strategyUsed: string
+    user: string
 }

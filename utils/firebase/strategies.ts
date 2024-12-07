@@ -1,4 +1,4 @@
-import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 
 const collectionName = "strategies";
@@ -12,10 +12,14 @@ export const createStrategy = async (data: any) => {
   }
 };
 
-export const subscribeToStrategies = (callback: (items: any[]) => void) => {
+export const subscribeToStrategies = (userId: string, callback: (items: any[]) => void) => {
   const collectionRef = collection(db, collectionName);
-  return onSnapshot(collectionRef, (querySnapshot) => {
-    const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const userQuery = query(collectionRef, where("user", "==", userId));
+  return onSnapshot(userQuery, (querySnapshot) => {
+    const items = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     callback(items);
   });
 };

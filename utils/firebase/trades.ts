@@ -12,18 +12,22 @@ export const createTrade = async (data: any) => {
   }
 };
 
-export const subscribeToTrades = (callback: (items: any[]) => void) => {
+export const subscribeToTrades = (userId: string, callback: (items: any[]) => void) => {
   const collectionRef = collection(db, collectionName);
-  return onSnapshot(collectionRef, (querySnapshot) => {
-    const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const userQuery = query(collectionRef, where("user", "==", userId));
+  return onSnapshot(userQuery, (querySnapshot) => {
+    const items = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     callback(items);
   });
 };
 
-export const removeStrategyAfterDeletion = async (oldStrategy: string) => {
+export const removeStrategyAfterDeletion = async (userId: string, oldStrategy: string) => {
   try {
     const collectionRef = collection(db, "trades");
-    const q = query(collectionRef, where("strategyUsed", "==", oldStrategy));
+    const q = query(collectionRef, where("strategyUsed", "==", oldStrategy), where("user", "==", userId));
     const querySnapshot = await getDocs(q);
 
     const updatePromises = querySnapshot.docs.map((docSnapshot) =>
@@ -37,10 +41,10 @@ export const removeStrategyAfterDeletion = async (oldStrategy: string) => {
   }
 };
 
-export const changeStrategyAfterupdate = async (oldStrategy: string, newStrategy: string) => {
+export const changeStrategyAfterupdate = async (userId: string, oldStrategy: string, newStrategy: string) => {
   try {
     const collectionRef = collection(db, "trades");
-    const q = query(collectionRef, where("strategyUsed", "==", oldStrategy));
+    const q = query(collectionRef, where("strategyUsed", "==", oldStrategy), where("user", "==", userId))
     const querySnapshot = await getDocs(q);
 
     const updatePromises = querySnapshot.docs.map((docSnapshot) =>

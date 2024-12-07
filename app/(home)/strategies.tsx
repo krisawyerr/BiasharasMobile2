@@ -14,6 +14,7 @@ import { subscribeToTrades } from "../../utils/firebase/trades";
 import { Trade } from "../../types/Trade";
 import NoData from "../../components/NoData";
 import Loading from "../../components/Loading";
+import { useAuth } from "../../context/UserContext";
 
 export default function Strategies() {
   const router = useRouter();
@@ -21,19 +22,19 @@ export default function Strategies() {
   const colorTheme = theme === "light" ? light : dark
   const [strategyStats, setStrategyStats] = useState<StrategyData[]>([]);
   const navigation = useNavigation()
-  const [strategies, setStrategies] = useState<Strategy[]>([]);
+  const [strategies, setStrategies] = useState<Strategy[]>();
   const [allTrades, setAllTrades] = useState<Trade[]>([]);
-  const trades = allTrades.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribeStrats = subscribeToStrategies(setStrategies);
+    const unsubscribeStrats = subscribeToStrategies(user.uid, setStrategies);
     return () => unsubscribeStrats();
   }, []);
 
   useEffect(() => {
-    const unsubscribeTrades = subscribeToTrades(setAllTrades);
-    return () => unsubscribeTrades();
+    const unsubscribe = subscribeToTrades(user.uid, setAllTrades);
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -47,23 +48,19 @@ export default function Strategies() {
   }, [navigation, colorTheme]);
 
   useEffect(() => {
-    if (trades.length > 0) {
-      function getStats() {
-        const formattedData = formatTrades(trades)
+    function getStats() {
+      if (allTrades.length > 0) {
+        const formattedData = formatTrades(allTrades)
         setStrategyStats(formattedData.formattedStrategiesData)
       }
 
-      getStats();
-    }
-  }, [trades]);
-
-  useEffect(() => {
-    if (strategies.length > 0) {
       setLoading(false);
     }
-  }, [strategies]);
 
-  if (loading) return <Loading />;
+    getStats();
+  }, [allTrades]);
+
+  if (!strategies || loading) return <Loading />;
   if (strategies.length === 0) return (
     <NoData
       header="No Strategies Available"
@@ -73,7 +70,7 @@ export default function Strategies() {
 
   return (
     <ScrollView style={[styles.page, { backgroundColor: colorTheme.bodyBackground, }]}>
-      <View style={[styles.section, { backgroundColor: colorTheme.sectionBackground, }]}>
+      {strategies && <View style={[styles.section, { backgroundColor: colorTheme.sectionBackground, }]}>
         <View style={[styles.tradeItem, { backgroundColor: colorTheme.sectionBackground, borderTopColor: `${colorTheme.headerText}00`, }]}>
           <View style={styles.titleGridCell}>
             <Text style={[styles.date, { color: colorTheme.headerText, }]}>Name</Text>
@@ -103,7 +100,7 @@ export default function Strategies() {
             </Pressable>
           )
         })}
-      </View>
+      </View>}
     </ScrollView>
   );
 }
