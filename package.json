@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-firebase/app": "^21.6.1",
+    "@react-native-firebase/auth": "^21.6.1",
     "@react-navigation/native": "^7.0.8",
     "expo": "~52.0.11",
     "expo-constants": "~17.0.3",

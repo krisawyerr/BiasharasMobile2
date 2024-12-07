@@ -4,11 +4,16 @@ import { Pressable, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { dark, light } from "../../data/colors";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/UserContext";
+import AuthPage from "../../components/AuthPage";
 
 export default function RootLayout() {
     const navigation = useNavigation();
     const { theme } = useTheme();
     const colorTheme = theme === "light" ? light : dark
+    const { user } = useAuth();
+
+    if (user === null) return <AuthPage />
 
     return (
         <Tabs
